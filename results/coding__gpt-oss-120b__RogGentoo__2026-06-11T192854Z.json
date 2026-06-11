@@ -1,0 +1,109 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "coding",
+  "suite_version": "1",
+  "label": "gpt-oss-120b",
+  "run_at": "2026-06-11T19:28:54Z",
+  "endpoint": "http://127.0.0.1:8080",
+  "served_model_id": "gpt-oss-120b",
+  "model": {
+    "name": "gpt-oss-120b",
+    "backend": "llama.cpp",
+    "quant": "MXFP4",
+    "ctx": 131072,
+    "params_b": 117.0
+  },
+  "hardware": {
+    "host": "RogGentoo",
+    "os": "Linux-6.18.31-gentoo-dist-x86_64-AMD_Ryzen_Threadripper_9970X_32-Cores-with-glibc2.42",
+    "cpu": "AMD Ryzen Threadripper 9970X 32-Cores",
+    "cores": 64,
+    "ram_gb": 125.1,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3080 Ti",
+        "vram_mb": 12288,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "AMD Radeon AI PRO R9700",
+        "vram_mb": 32624,
+        "vendor": "amd"
+      },
+      {
+        "name": "AMD Radeon AI PRO R9700",
+        "vram_mb": 32624,
+        "vendor": "amd"
+      },
+      {
+        "name": "AMD Radeon AI PRO R9700",
+        "vram_mb": 32624,
+        "vendor": "amd"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3080 Ti 12GB, AMD Radeon AI PRO R9700 31GB, AMD Radeon AI PRO R9700 31GB, AMD Radeon AI PRO R9700 31GB"
+  },
+  "scores": {
+    "total": 6.0,
+    "max": 6,
+    "tiers": {
+      "code": [
+        2.0,
+        2
+      ],
+      "hard": [
+        4.0,
+        4
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 93.45,
+    "prefill_tps": 102.67
+  },
+  "tasks": [
+    {
+      "id": "fib",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 2.0,
+      "detail": "out='55'"
+    },
+    {
+      "id": "bugfix",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 2.9,
+      "detail": "out='4.0'"
+    },
+    {
+      "id": "palindrome",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 6.2,
+      "detail": "out='bab\\nbb\\na\\ngeeksskeeg'"
+    },
+    {
+      "id": "parens",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 3.9,
+      "detail": "out='True\\nFalse\\nFalse\\nTrue'"
+    },
+    {
+      "id": "dedup_order",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 4.5,
+      "detail": "out='[3, 1, 2]\\n[[1], [2], [1, 2]]'"
+    },
+    {
+      "id": "rate_limiter",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 10.8,
+      "detail": "out='[True, True, False, True, False]'"
+    }
+  ]
+}

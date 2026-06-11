@@ -1,0 +1,4 @@
+# ai-benchy has ONE runtime dependency — Pillow, used only by the vision suite to
+# render the synthetic test images. The text suites (coding/reasoning/agentic) are
+# pure stdlib and run without it.
+pillow>=9.0
