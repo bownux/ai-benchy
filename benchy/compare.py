@@ -31,12 +31,14 @@ def leaderboard(paths):
     by_suite = {}
     for r in results:
         by_suite.setdefault(r.get("suite", "?"), []).append(r)
-    lines = ["# ai-benchy leaderboard", "",
-             "<!-- generated: `python -m benchy compare results/ > LEADERBOARD.md` — do not hand-edit -->",
-             "",
-             "Scores are out of each suite's task count; tiers show the breakdown. `gen tok/s`"
-             " is throughput on the **runner's** hardware (shown in the last column), so compare"
-             " capability across rows and speed only within the same hardware.", ""]
+    lines = ["# ai-benchy leaderboard", ""]
+    if not results:
+        return "\n".join(lines + ["_no result files found._"])
+    lines += ["<!-- generated: `python -m benchy compare results/ > LEADERBOARD.md` — do not hand-edit -->",
+              "",
+              "Scores are out of each suite's task count; tiers show the breakdown. `gen tok/s`"
+              " is throughput on the **runner's** hardware (shown in the last column), so compare"
+              " capability across rows and speed only within the same hardware.", ""]
     for suite in sorted(by_suite):
         rows = by_suite[suite]
         rows.sort(key=lambda r: (r["scores"]["total"], r["throughput"].get("gen_tps") or 0), reverse=True)
@@ -53,6 +55,4 @@ def leaderboard(paths):
             lines.append(f"| **{r.get('label','?')}** | {s['total']:.0f}/{s['max']} | {_tier_str(s)} "
                          f"| {tp if tp is not None else '—'} | {backend} | {hw} | {when} |")
         lines.append("")
-    if len(results) == 0:
-        lines.append("_no result files found._")
     return "\n".join(lines)
