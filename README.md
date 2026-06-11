@@ -12,6 +12,8 @@ different hardware. ai-benchy makes the answer *repeatable* — every task is sc
 Blackwell 5000s mean the same thing. Each result stamps in your **auto-detected
 hardware**, so the comparison is fair without anyone keeping notes.
 
+📊 **[Current results → LEADERBOARD.md](LEADERBOARD.md)** (regenerate with `python -m benchy compare results/ > LEADERBOARD.md`).
+
 ## What it measures
 
 | Suite | Needs | Tasks |
