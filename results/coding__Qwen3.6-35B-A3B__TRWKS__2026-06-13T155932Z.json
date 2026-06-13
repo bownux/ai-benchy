@@ -1,0 +1,98 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "coding",
+  "suite_version": "1",
+  "label": "Qwen3.6-35B-A3B",
+  "run_at": "2026-06-13T15:59:32Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "Qwen3.6-35B-A3B",
+  "model": {
+    "name": "Qwen3.6-35B-A3B",
+    "backend": "llama.cpp",
+    "ctx": 131072,
+    "params_b": 35.5
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 5000 Blackwell",
+        "vram_mb": 48935,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
+  },
+  "scores": {
+    "total": 5.0,
+    "max": 6,
+    "tiers": {
+      "code": [
+        2.0,
+        2
+      ],
+      "hard": [
+        3.0,
+        4
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 198.43,
+    "prefill_tps": 336.56
+  },
+  "tasks": [
+    {
+      "id": "fib",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 9.5,
+      "detail": "out='55'"
+    },
+    {
+      "id": "bugfix",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 4.9,
+      "detail": "out='4.0'"
+    },
+    {
+      "id": "palindrome",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 14.4,
+      "detail": "out='aba\\nbb\\na\\ngeeksskeeg'"
+    },
+    {
+      "id": "parens",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 10.5,
+      "detail": "out='True\\nFalse\\nFalse\\nTrue'"
+    },
+    {
+      "id": "dedup_order",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 13.7,
+      "detail": "out='[3, 1, 2]\\n[[1], [2], [1, 2]]'"
+    },
+    {
+      "id": "rate_limiter",
+      "tier": "hard",
+      "score": 0.0,
+      "latency_s": 18.5,
+      "detail": "out='[stderr]   File \"<string>\", line 9\\n    Here\\'s the complete i'"
+    }
+  ]
+}

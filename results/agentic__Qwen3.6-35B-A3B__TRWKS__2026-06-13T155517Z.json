@@ -1,0 +1,84 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "agentic",
+  "suite_version": "1",
+  "label": "Qwen3.6-35B-A3B",
+  "run_at": "2026-06-13T15:55:17Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "Qwen3.6-35B-A3B",
+  "model": {
+    "name": "Qwen3.6-35B-A3B",
+    "backend": "llama.cpp",
+    "ctx": 131072,
+    "params_b": 35.5
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 5000 Blackwell",
+        "vram_mb": 48935,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
+  },
+  "scores": {
+    "total": 3.0,
+    "max": 4,
+    "tiers": {
+      "core": [
+        1.0,
+        2
+      ],
+      "agentic": [
+        2.0,
+        2
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 193.8,
+    "prefill_tps": 287.27
+  },
+  "tasks": [
+    {
+      "id": "tool_call",
+      "tier": "core",
+      "score": 0.0,
+      "latency_s": 1.6,
+      "detail": "no tool_call"
+    },
+    {
+      "id": "doc_follow",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 1.1,
+      "detail": "raw='orchard release --channel beta --build 1234'"
+    },
+    {
+      "id": "disk_full",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 11.2,
+      "detail": "calls=14 df=True culprit=True fix=True wandered=False"
+    },
+    {
+      "id": "crash_loop",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 3.0,
+      "detail": "calls=3 sawlog=True root=True wandered=False"
+    }
+  ]
+}
