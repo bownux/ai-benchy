@@ -26,6 +26,24 @@ def _tier_str(scores):
     return " · ".join(f"{k} {v[0]:.0f}/{v[1]}" for k, v in t.items()) or "-"
 
 
+def _rank(r):
+    """Higher is better: score, then throughput, then most recent."""
+    s = r.get("scores", {})
+    return (s.get("total", 0), r.get("throughput", {}).get("gen_tps") or 0, r.get("run_at", ""))
+
+
+def _dedup(rows):
+    """Collapse repeat runs to the single best per (label, hardware) so re-running a
+    model replaces its row rather than stacking another. Distinct labels (e.g. a
+    `-nothink` variant) are kept separate. Returns (kept_rows, dropped_count)."""
+    best = {}
+    for r in rows:
+        key = (r.get("label"), r.get("hardware", {}).get("gpu_summary"))
+        if key not in best or _rank(r) > _rank(best[key]):
+            best[key] = r
+    return list(best.values()), len(rows) - len(best)
+
+
 def leaderboard(paths):
     results = _load(paths)
     by_suite = {}
@@ -40,10 +58,13 @@ def leaderboard(paths):
               " is throughput on the **runner's** hardware (shown in the last column), so compare"
               " capability across rows and speed only within the same hardware.", ""]
     for suite in sorted(by_suite):
-        rows = by_suite[suite]
-        rows.sort(key=lambda r: (r["scores"]["total"], r["throughput"].get("gen_tps") or 0), reverse=True)
+        rows, dropped = _dedup(by_suite[suite])
+        # score desc, then tok/s desc, then label asc for a stable, deterministic order
+        rows.sort(key=lambda r: (-r["scores"]["total"], -(r["throughput"].get("gen_tps") or 0),
+                                 r.get("label", "")))
         ver = rows[0].get("suite_version", "?")
-        lines += [f"## {suite}  (suite v{ver}, {len(rows)} runs)", "",
+        runs = f"{len(rows)} runs" + (f", {dropped} older deduped" if dropped else "")
+        lines += [f"## {suite}  (suite v{ver}, {runs})", "",
                   "| Model | Score | Tiers | gen tok/s | Backend · Quant | Hardware | Run |",
                   "|---|---|---|---|---|---|---|"]
         for r in rows:

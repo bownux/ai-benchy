@@ -17,9 +17,9 @@ def _now_iso():
 
 
 def run_suite(suite_name, endpoint, label, model_meta=None, out_dir="results",
-              skip_exec=False, api_key=None, model_name="benchy", quiet=False):
+              skip_exec=False, api_key=None, model_name="benchy", quiet=False, no_think=False):
     suite = get(suite_name)
-    client = Client(endpoint, api_key=api_key, model=model_name)
+    client = Client(endpoint, api_key=api_key, model=model_name, no_think=no_think)
     if not client.health():
         raise SystemExit(f"endpoint not reachable: {endpoint}")
     hw = hwinfo.detect()
@@ -35,15 +35,23 @@ def run_suite(suite_name, endpoint, label, model_meta=None, out_dir="results",
         if skip_exec and task.tier == "code":
             continue
         t0 = time.time()
+        client.last_finish_reason = None
         try:
             score, detail = task.run(client)
         except Exception as e:
             score, detail = 0.0, "EXC:" + str(e)[:100]
         dt = round(time.time() - t0, 1)
+        fr = client.last_finish_reason
+        # `length` means the model hit max_tokens before finishing — an empty/wrong
+        # answer here is a truncation, not (necessarily) a capability failure. Flag it
+        # so a reasoning model's overflowed budget doesn't read as a plain miss.
+        if fr == "length":
+            detail = (detail + " [trunc:length]") if detail else "[trunc:length]"
         total += score
         tier_tot[task.tier] = tier_tot.get(task.tier, 0.0) + score
         tier_max[task.tier] = tier_max.get(task.tier, 0) + 1
-        tasks_out.append({"id": task.id, "tier": task.tier, "score": score, "latency_s": dt, "detail": detail})
+        tasks_out.append({"id": task.id, "tier": task.tier, "score": score,
+                          "latency_s": dt, "finish_reason": fr, "detail": detail})
         if not quiet:
             print(f"  [{task.tier:<7}] {task.id:<16} {score:.0f}  {detail[:56]}  {dt}s")
 
@@ -55,6 +63,7 @@ def run_suite(suite_name, endpoint, label, model_meta=None, out_dir="results",
         "label": label, "run_at": _now_iso(),
         "endpoint": endpoint, "served_model_id": served,
         "model": model_meta or {},
+        "options": {"no_think": no_think},
         "hardware": hw,
         "scores": {"total": round(total, 1), "max": n,
                    "tiers": {t: [round(tier_tot[t], 1), tier_max[t]] for t in tier_tot}},

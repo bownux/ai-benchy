@@ -13,15 +13,16 @@ import json, time, urllib.request, urllib.error
 
 
 class Response:
-    __slots__ = ("content", "tool_calls", "timings", "usage", "latency_s", "raw")
+    __slots__ = ("content", "tool_calls", "timings", "usage", "latency_s", "raw", "finish_reason")
 
-    def __init__(self, content, tool_calls, timings, usage, latency_s, raw):
+    def __init__(self, content, tool_calls, timings, usage, latency_s, raw, finish_reason=None):
         self.content = content or ""
         self.tool_calls = tool_calls or []
         self.timings = timings or {}
         self.usage = usage or {}
         self.latency_s = latency_s
         self.raw = raw
+        self.finish_reason = finish_reason
 
     def gen_tps(self):
         """Generation tok/s: server timings if present, else wall-clock."""
@@ -34,10 +35,12 @@ class Response:
 
 
 class Client:
-    def __init__(self, base, timeout=240, api_key=None, model="benchy"):
+    def __init__(self, base, timeout=240, api_key=None, model="benchy", no_think=False):
         self.base = base.rstrip("/")
         self.timeout = timeout
         self.model = model
+        self.no_think = no_think
+        self.last_finish_reason = None  # set by chat(); the runner reads it to flag truncations
         self.headers = {"Content-Type": "application/json"}
         if api_key:
             self.headers["Authorization"] = f"Bearer {api_key}"
@@ -60,12 +63,18 @@ class Client:
                 "max_tokens": max_tokens, "temperature": temperature, "stream": False}
         if tools:
             body["tools"] = tools
+        if self.no_think:
+            # Disable a reasoning model's chain-of-thought so the token budget is spent
+            # on the answer, not the `reasoning_content` channel (e.g. Qwen3 thinking).
+            body["chat_template_kwargs"] = {"enable_thinking": False}
         t0 = time.time()
         j = self._post("/v1/chat/completions", body)
         dt = time.time() - t0
-        msg = (j.get("choices") or [{}])[0].get("message", {}) or {}
+        choice = (j.get("choices") or [{}])[0]
+        msg = choice.get("message", {}) or {}
+        self.last_finish_reason = choice.get("finish_reason")
         return Response(msg.get("content"), msg.get("tool_calls"),
-                        j.get("timings"), j.get("usage"), dt, j)
+                        j.get("timings"), j.get("usage"), dt, j, self.last_finish_reason)
 
     def served_model_id(self):
         """Whatever the server says it's serving (best-effort)."""

@@ -10,8 +10,8 @@ from __future__ import annotations
 import re, subprocess, sys, textwrap
 
 _GUARD = textwrap.dedent("""
-    import resource, sys
     try:
+        import resource  # Unix-only; absent on Windows, where limits are simply skipped
         resource.setrlimit(resource.RLIMIT_CPU, (5, 5))
         resource.setrlimit(resource.RLIMIT_AS, (1024*1024*1024, 1024*1024*1024))
         resource.setrlimit(resource.RLIMIT_FSIZE, (4*1024*1024, 4*1024*1024))
