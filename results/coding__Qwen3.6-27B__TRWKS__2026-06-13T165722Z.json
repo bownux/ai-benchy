@@ -1,0 +1,98 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "coding",
+  "suite_version": "1",
+  "label": "Qwen3.6-27B",
+  "run_at": "2026-06-13T16:57:22Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "Qwen3.6-27B",
+  "model": {
+    "name": "Qwen3.6-27B",
+    "backend": "llama.cpp",
+    "ctx": 140032,
+    "params_b": 27.3
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 5000 Blackwell",
+        "vram_mb": 48935,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
+  },
+  "scores": {
+    "total": 5.0,
+    "max": 6,
+    "tiers": {
+      "code": [
+        1.0,
+        2
+      ],
+      "hard": [
+        4.0,
+        4
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 64.15,
+    "prefill_tps": 169.08
+  },
+  "tasks": [
+    {
+      "id": "fib",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 32.9,
+      "detail": "out='55'"
+    },
+    {
+      "id": "bugfix",
+      "tier": "code",
+      "score": 0.0,
+      "latency_s": 56.2,
+      "detail": "out=''"
+    },
+    {
+      "id": "palindrome",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 38.9,
+      "detail": "out='bab\\nbb\\na\\ngeeksskeeg'"
+    },
+    {
+      "id": "parens",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 30.1,
+      "detail": "out='True\\nFalse\\nFalse\\nTrue'"
+    },
+    {
+      "id": "dedup_order",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 30.5,
+      "detail": "out='[3, 1, 2]\\n[[1], [2], [1, 2]]'"
+    },
+    {
+      "id": "rate_limiter",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 45.2,
+      "detail": "out='[True, True, False, True, False]'"
+    }
+  ]
+}
