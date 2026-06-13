@@ -1,0 +1,88 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "reasoning",
+  "suite_version": "1",
+  "label": "Qwen3.6-27B-nothink",
+  "run_at": "2026-06-13T17:16:23Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "Qwen3.6-27B",
+  "model": {
+    "name": "Qwen3.6-27B",
+    "backend": "llama.cpp",
+    "ctx": 140032,
+    "params_b": 27.3,
+    "notes": "enable_thinking=false"
+  },
+  "options": {
+    "no_think": true
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 5000 Blackwell",
+        "vram_mb": 48935,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
+  },
+  "scores": {
+    "total": 4.0,
+    "max": 4,
+    "tiers": {
+      "core": [
+        4.0,
+        4
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 45.08,
+    "prefill_tps": 213.61
+  },
+  "tasks": [
+    {
+      "id": "json_only",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.3,
+      "finish_reason": "stop",
+      "detail": "raw='{\"name\":\"alice\",\"age\":30}'"
+    },
+    {
+      "id": "reasoning",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
+      "detail": "raw='5'"
+    },
+    {
+      "id": "sql",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.7,
+      "finish_reason": "stop",
+      "detail": "clauses=True"
+    },
+    {
+      "id": "recall",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.3,
+      "finish_reason": "stop",
+      "detail": "raw='ZEPHYR-7741'"
+    }
+  ]
+}
