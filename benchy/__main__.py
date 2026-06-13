@@ -32,7 +32,8 @@ def cmd_run(a):
     for s in suites:
         try:
             run_suite(s, a.endpoint, a.label, model_meta=_model_meta(a), out_dir=a.out,
-                      skip_exec=a.no_exec, api_key=a.api_key, model_name=a.model)
+                      skip_exec=a.no_exec, api_key=a.api_key, model_name=a.model,
+                      no_think=a.no_think)
         except SystemExit as e:
             print(f"!! {s}: {e}", file=sys.stderr)
 
@@ -76,6 +77,9 @@ def main():
     r.add_argument("--model", default="benchy", help="model id to send in the request (most servers ignore it)")
     r.add_argument("--api-key", default=None, help="bearer token if your endpoint needs one")
     r.add_argument("--no-exec", action="store_true", help="skip code-execution tasks (don't run model output)")
+    r.add_argument("--no-think", action="store_true",
+                   help="disable a reasoning model's chain-of-thought (sends chat_template_kwargs "
+                        "enable_thinking=false) so the token budget goes to the answer")
     # optional metadata stamped into the result for fair comparison
     r.add_argument("--backend", default=None, help="llama.cpp | vllm | ollama | lmstudio | ...")
     r.add_argument("--quant", default=None, help="e.g. Q4_K_M, MXFP4, fp16")
