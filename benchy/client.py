@@ -84,11 +84,29 @@ class Client:
         except Exception:
             return None
 
-    def measure_throughput(self, prompt="Write a haiku about benchmarking.", max_tokens=64):
-        """A short generation to record prefill + gen tok/s for the result file."""
+    def measure_throughput(self, prompt=None, max_tokens=256):
+        """A sustained generation to record prefill + gen tok/s for the result file.
+
+        The probe must decode ENOUGH tokens that steady-state speed dominates the
+        fixed per-request overhead (sampler init, the first eval after prefill).
+        The old probe — a haiku capped at 64 tokens — self-terminates after ~15
+        tokens, so ``predicted_per_second`` came out badly low on anything but the
+        fastest servers: a VL-8B that truly sustains ~120 tok/s measured ~10. We
+        now use a prompt that won't stop early and decode a few hundred tokens,
+        and record ``gen_n`` (the token count the rate was measured over) so a
+        reader can sanity-check it was a real generation, not a 15-token blip.
+        """
+        if prompt is None:
+            prompt = ("Write a thorough, multi-paragraph technical explanation "
+                      "(about 300 words) of how virtual memory paging works in a "
+                      "modern operating system: cover page tables, the TLB, page "
+                      "faults, and swapping to disk.")
         try:
             r = self.chat([{"role": "user", "content": prompt}], max_tokens=max_tokens)
             out = {"gen_tps": r.gen_tps()}
+            gen_n = r.timings.get("predicted_n") or r.usage.get("completion_tokens")
+            if gen_n:
+                out["gen_n"] = int(gen_n)   # tokens the rate was measured over (self-audit)
             if r.timings.get("prompt_per_second"):
                 out["prefill_tps"] = round(float(r.timings["prompt_per_second"]), 2)
             return out

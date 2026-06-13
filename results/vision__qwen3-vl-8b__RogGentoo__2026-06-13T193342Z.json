@@ -4,7 +4,7 @@
   "suite": "vision",
   "suite_version": "1",
   "label": "qwen3-vl-8b",
-  "run_at": "2026-06-11T19:28:10Z",
+  "run_at": "2026-06-13T19:33:42Z",
   "endpoint": "http://127.0.0.1:8081",
   "served_model_id": "qwen3-vl-8b",
   "model": {
@@ -12,6 +12,9 @@
     "backend": "llama.cpp",
     "quant": "IQ4_XS",
     "params_b": 8.0
+  },
+  "options": {
+    "no_think": false
   },
   "hardware": {
     "host": "RogGentoo",
@@ -58,197 +61,225 @@
     }
   },
   "throughput": {
-    "gen_tps": 9.66,
-    "prefill_tps": 108.64
+    "gen_tps": 119.49,
+    "gen_n": 256,
+    "prefill_tps": 2194.72
   },
   "tasks": [
     {
       "id": "ocr_code",
       "tier": "core",
       "score": 0.0,
-      "latency_s": 3.5,
+      "latency_s": 0.3,
+      "finish_reason": "stop",
       "detail": "ans='Order: 0r0d: 0QX 74821-BB'"
     },
     {
       "id": "ocr_fields",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 1.3,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='137.50'"
     },
     {
       "id": "count_circles",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 0.9,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='7'"
     },
     {
       "id": "count_red",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 1.2,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='4'"
     },
     {
       "id": "largest_color",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 0.9,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='green'"
     },
     {
       "id": "shape_id",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 0.7,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='triangle'"
     },
     {
       "id": "spatial",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='red'"
     },
     {
       "id": "spatial_shape",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='triangle'"
     },
     {
       "id": "chart_max",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='D'"
     },
     {
       "id": "chart_min",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 0.9,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='A'"
     },
     {
       "id": "table_json",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 3.7,
+      "latency_s": 0.3,
+      "finish_reason": "stop",
       "detail": "ans='{\\n  \"Apples\": 12,\\n  \"Mangoes\": 5,\\n  \"Pears\": 9\\n}'"
     },
     {
       "id": "compare_size",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 0.8,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='right'"
     },
     {
       "id": "grid_center",
       "tier": "core",
       "score": 1.0,
-      "latency_s": 0.7,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='K'"
     },
     {
       "id": "ocr_confusable",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 2.3,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='RX80-9KQ4-7ZW2-J3H6'"
     },
     {
       "id": "ocr_smallprint",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 2.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='99XK-220841-Q8'"
     },
     {
       "id": "ocr_rotated",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 1.2,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='7741'"
     },
     {
       "id": "ocr_reading",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 1.1,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='1932'"
     },
     {
       "id": "ocr_math",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 0.7,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='82'"
     },
     {
       "id": "count_many",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 1.1,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='17'"
     },
     {
       "id": "count_2attr",
       "tier": "hard",
       "score": 0.0,
-      "latency_s": 1.1,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='4'"
     },
     {
       "id": "chart_threshold",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='3'"
     },
     {
       "id": "chart_diff",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 1.2,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='120'"
     },
     {
       "id": "line_trend",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
       "detail": "ans='increasing'"
     },
     {
       "id": "spatial_relative",
       "tier": "hard",
       "score": 0.0,
-      "latency_s": 0.7,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='blue'"
     },
     {
       "id": "table_cell",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 0.9,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='$7'"
     },
     {
       "id": "table_sum",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 0.9,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='56'"
     },
     {
       "id": "odd_one_out",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 0.7,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
       "detail": "ans='4'"
     }
   ]

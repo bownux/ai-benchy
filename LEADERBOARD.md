@@ -26,5 +26,5 @@ Scores are out of each suite's task count; tiers show the breakdown. `gen tok/s`
 
 | Model | Score | Tiers | gen tok/s | Backend · Quant | Hardware | Run |
 |---|---|---|---|---|---|---|
-| **qwen3-vl-8b** | 24/27 | core 12/13 · hard 12/14 | 9.66 | llama.cpp · IQ4_XS | NVIDIA GeForce RTX 3080 Ti 12GB, AMD Radeon AI PRO R9700 31GB, AMD Radeon AI PRO R9700 31GB, AMD Radeon AI PRO R9700 31GB | 2026-06-11 |
+| **qwen3-vl-8b** | 24/27 | core 12/13 · hard 12/14 | 119.49 | llama.cpp · IQ4_XS | NVIDIA GeForce RTX 3080 Ti 12GB, AMD Radeon AI PRO R9700 31GB, AMD Radeon AI PRO R9700 31GB, AMD Radeon AI PRO R9700 31GB | 2026-06-13 |
 
