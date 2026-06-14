@@ -1,0 +1,91 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "agentic",
+  "suite_version": "1",
+  "label": "Qwen3-Coder-Next",
+  "run_at": "2026-06-14T02:58:28Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "Qwen3-Coder-Next",
+  "model": {
+    "name": "Qwen3-Coder-Next",
+    "backend": "llama.cpp",
+    "ctx": 131072,
+    "params_b": 79.7
+  },
+  "options": {
+    "no_think": false
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 5000 Blackwell",
+        "vram_mb": 48935,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
+  },
+  "scores": {
+    "total": 4.0,
+    "max": 4,
+    "tiers": {
+      "core": [
+        2.0,
+        2
+      ],
+      "agentic": [
+        2.0,
+        2
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 90.16,
+    "prefill_tps": 75.36
+  },
+  "tasks": [
+    {
+      "id": "tool_call",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.5,
+      "finish_reason": "tool_calls",
+      "detail": "args={'city': 'Tokyo', 'unit': 'c'}"
+    },
+    {
+      "id": "doc_follow",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.3,
+      "finish_reason": "stop",
+      "detail": "raw='```bash\\norchard release --channel beta --build 1234\\n```'"
+    },
+    {
+      "id": "disk_full",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 8.5,
+      "finish_reason": "stop",
+      "detail": "calls=14 df=True culprit=True fix=True wandered=False"
+    },
+    {
+      "id": "crash_loop",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 10.3,
+      "finish_reason": "stop",
+      "detail": "calls=16 sawlog=True root=True wandered=False"
+    }
+  ]
+}
