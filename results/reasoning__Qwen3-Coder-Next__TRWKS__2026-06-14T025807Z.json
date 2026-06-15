@@ -11,7 +11,8 @@
     "name": "Qwen3-Coder-Next",
     "backend": "llama.cpp",
     "ctx": 131072,
-    "params_b": 79.7
+    "params_b": 79.7,
+    "quant": "UD-IQ4_XS"
   },
   "options": {
     "no_think": false
