@@ -43,6 +43,11 @@ def cmd_compare(a):
     print(leaderboard(a.paths or ["results"]))
 
 
+def cmd_compare_conc(a):
+    from .compare import conc_leaderboard
+    print(conc_leaderboard(a.paths or ["results"]))
+
+
 def cmd_list(a):
     for s in all_suites():
         print(f"\n{s.name}  (v{s.version}, needs {s.needs}) — {s.blurb}")
@@ -92,6 +97,10 @@ def main():
     c = sub.add_parser("compare", help="merge result files into a leaderboard")
     c.add_argument("paths", nargs="*", help="result files or dirs (default: results/)")
     c.set_defaults(fn=cmd_compare)
+
+    cc = sub.add_parser("compare-conc", help="merge concbench result files into a concurrency leaderboard")
+    cc.add_argument("paths", nargs="*", help="concresult files or dirs (default: results/)")
+    cc.set_defaults(fn=cmd_compare_conc)
 
     l = sub.add_parser("list", help="list suites and tasks")
     l.set_defaults(fn=cmd_list)
