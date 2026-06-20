@@ -46,7 +46,10 @@ def percentile(values, p):
 
 
 def one_request(base, headers, model, prompt, max_tokens, temperature, timeout, no_think):
-    """Stream one chat completion. Returns (ttft_s, total_s, out_tokens, ok, err)."""
+    """Stream one chat completion.
+    Returns (ttft_s, total_s, out_tokens, ok, err, used_usage), where used_usage is
+    True iff out_tokens came from the server's exact usage.completion_tokens (vs the
+    streamed-delta fallback, which is only an approximation)."""
     body = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
@@ -90,10 +93,11 @@ def one_request(base, headers, model, prompt, max_tokens, temperature, timeout, 
                             ttft = time.time() - t0
                         chunk_tokens += 1
         total = time.time() - t0
-        out_tokens = usage_tokens if usage_tokens is not None else chunk_tokens
-        return (ttft, total, out_tokens, True, None)
+        used_usage = usage_tokens is not None
+        out_tokens = usage_tokens if used_usage else chunk_tokens
+        return (ttft, total, out_tokens, True, None, used_usage)
     except Exception as e:
-        return (None, time.time() - t0, 0, False, str(e)[:120])
+        return (None, time.time() - t0, 0, False, str(e)[:120], False)
 
 
 def main():
@@ -110,6 +114,8 @@ def main():
                     help="send chat_template_kwargs enable_thinking=false (recommended for a "
                          "clean throughput test — bounds output length and makes TTFT meaningful)")
     a = ap.parse_args()
+    if a.concurrency < 1 or a.num_prompts < 1:
+        ap.error("--concurrency and --num-prompts must be >= 1")
 
     base = a.endpoint.rstrip("/")
     headers = {"Content-Type": "application/json"}
@@ -136,28 +142,34 @@ def main():
             done += 1
             if done % max(1, a.num_prompts // 10) == 0:
                 print(f"  {done}/{a.num_prompts} done")
-    wall = time.time() - wall0
+    wall = max(time.time() - wall0, 1e-9)  # guard the divisor; real runs are never ~0
 
     ok = [r for r in results if r[3]]
     failed = [r for r in results if not r[3]]
     out_tokens = sum(r[2] for r in ok)
     ttfts = [r[0] for r in ok if r[0] is not None]
     lats = [r[1] for r in ok]
+    # Counts are EXACT only if every ok request reported usage.completion_tokens. If any
+    # server omitted usage we counted streamed deltas instead (not guaranteed one token
+    # each), so the rate is approximate — flag it with `~` rather than claiming tok/s.
+    exact = bool(ok) and all(r[5] for r in ok)
+    unit = "tok/s" if exact else "tok/s~"
 
     print("\n=== results ===")
     print(f"  ok={len(ok)}/{len(results)}  failed={len(failed)}  wall={wall:.1f}s")
     print(f"  request throughput : {len(ok) / wall:.2f} req/s")
-    print(f"  aggregate output   : {out_tokens / wall:.1f} tok/s  ({out_tokens} tokens total)")
+    print(f"  aggregate output   : {out_tokens / wall:.1f} {unit}  ({out_tokens} tokens total)")
     if ttfts:
         print(f"  TTFT   p50/p99     : {percentile(ttfts, 50):.3f}s / {percentile(ttfts, 99):.3f}s")
     if lats:
         print(f"  latency p50/p99    : {percentile(lats, 50):.2f}s / {percentile(lats, 99):.2f}s")
     per_req = out_tokens / sum(lats) if lats and sum(lats) else 0
-    print(f"  per-stream tok/s   : {per_req:.1f} tok/s  (avg single-stream gen rate)")
+    print(f"  per-stream rate    : {per_req:.1f} {unit}  (avg single-stream)")
     if failed:
         print(f"  first error        : {failed[0][4]}")
-    note = "exact (usage)" if any(r[2] for r in ok) else "n/a"
-    print(f"  token count source : {note}; set a non-zero --concurrency sweep to find the plateau.")
+    src = ("exact (server usage.completion_tokens)" if exact
+           else "~approx — some servers omitted usage; counted streamed deltas (not 1 token each)")
+    print(f"  token source       : {src}")
 
 
 if __name__ == "__main__":
