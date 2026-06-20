@@ -65,6 +65,28 @@ python -m benchy list           # show every suite and task
 python -m benchy selftest       # render the vision images locally to eyeball ground truth (no model)
 ```
 
+## Concurrency / serving load test
+
+The suites above are **single-stream** (one request at a time), so they measure model
+*capability*, not how your server holds up under load. `concbench.py` is a small,
+standalone companion for that: it fires N prompts through a pool of `--concurrency`
+workers and reports **aggregate output tok/s**, request throughput, **TTFT**
+(time-to-first-token), and per-request latency at p50/p99 — the numbers that show
+whether a backend actually batches.
+
+```bash
+python concbench.py --endpoint http://127.0.0.1:1234 --model qwen3-27b \
+    --no-think --concurrency 16 --num-prompts 64 --max-tokens 256
+
+# sweep concurrency to find where throughput plateaus and TTFT blows up
+for c in 1 4 16 32; do python concbench.py --endpoint http://127.0.0.1:1234 \
+    --model qwen3-27b --no-think --concurrency $c --num-prompts $((c*4)); done
+```
+
+Stdlib-only and OpenAI-compatible like the rest of benchy. Pass `--no-think` on a
+reasoning model so output length is bounded and TTFT is meaningful. Note: llama.cpp
+serializes requests unless you start `llama-server` with `--parallel N`.
+
 ## Comparing across machines
 
 The result JSON is the unit of sharing. To compare with a friend:
