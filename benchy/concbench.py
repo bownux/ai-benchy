@@ -10,11 +10,11 @@ throughput, TTFT (time-to-first-token), and per-request latency — at p50/p99.
 Zero dependencies (stdlib only), same spirit as benchy. Point it at vLLM, llama.cpp
 (start llama-server with --parallel N or it serializes!), ollama, LM Studio, etc.
 
-    python concbench.py --endpoint http://127.0.0.1:1234 --model Qwen3.6-27B \
+    python -m benchy.concbench --endpoint http://127.0.0.1:1234 --model Qwen3.6-27B \
         --concurrency 16 --num-prompts 64 --max-tokens 256
 
 Sweep concurrency to find where throughput plateaus and TTFT blows up:
-    for c in 1 4 8 16 32; do python concbench.py ... --concurrency $c; done
+    for c in 1 4 8 16 32; do python -m benchy.concbench ... --concurrency $c; done
 """
 from __future__ import annotations
 import argparse, json, time, urllib.request, urllib.error, random

@@ -68,18 +68,18 @@ python -m benchy selftest       # render the vision images locally to eyeball gr
 ## Concurrency / serving load test
 
 The suites above are **single-stream** (one request at a time), so they measure model
-*capability*, not how your server holds up under load. `concbench.py` is a small,
-standalone companion for that: it fires N prompts through a pool of `--concurrency`
+*capability*, not how your server holds up under load. `benchy.concbench` is a small
+companion module for that: it fires N prompts through a pool of `--concurrency`
 workers and reports **aggregate output tok/s**, request throughput, **TTFT**
 (time-to-first-token), and per-request latency at p50/p99 — the numbers that show
 whether a backend actually batches.
 
 ```bash
-python concbench.py --endpoint http://127.0.0.1:1234 --model qwen3-27b \
+python -m benchy.concbench --endpoint http://127.0.0.1:1234 --model qwen3-27b \
     --no-think --concurrency 16 --num-prompts 64 --max-tokens 256
 
 # sweep concurrency to find where throughput plateaus and TTFT blows up
-for c in 1 4 16 32; do python concbench.py --endpoint http://127.0.0.1:1234 \
+for c in 1 4 16 32; do python -m benchy.concbench --endpoint http://127.0.0.1:1234 \
     --model qwen3-27b --no-think --concurrency $c --num-prompts $((c*4)); done
 ```
 
