@@ -3,8 +3,8 @@
   "benchy_version": "0.1.0",
   "suite": "coding",
   "suite_version": "1",
-  "label": "Qwen3.6-27B",
-  "run_at": "2026-06-19T07:32:29Z",
+  "label": "Qwen3.6-27B-FP8",
+  "run_at": "2026-06-19T07:21:11Z",
   "endpoint": "http://127.0.0.1:1234",
   "served_model_id": "Qwen3.6-27B",
   "model": {
@@ -12,10 +12,10 @@
     "quant": "FP8",
     "ctx": 131072,
     "params_b": 27.3,
-    "notes": "vLLM FP8 on RTX PRO 5000 Blackwell, no-think"
+    "notes": "vLLM FP8 on RTX PRO 5000 Blackwell"
   },
   "options": {
-    "no_think": true
+    "no_think": false
   },
   "hardware": {
     "host": "TRWKS",
@@ -38,7 +38,7 @@
     "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
   },
   "scores": {
-    "total": 5.0,
+    "total": 4.0,
     "max": 6,
     "tiers": {
       "code": [
@@ -46,20 +46,20 @@
         2
       ],
       "hard": [
-        3.0,
+        2.0,
         4
       ]
     }
   },
   "throughput": {
-    "gen_tps": 33.58
+    "gen_tps": 60.13
   },
   "tasks": [
     {
       "id": "fib",
       "tier": "code",
       "score": 1.0,
-      "latency_s": 2.0,
+      "latency_s": 28.0,
       "finish_reason": "stop",
       "detail": "out='55'"
     },
@@ -67,23 +67,23 @@
       "id": "bugfix",
       "tier": "code",
       "score": 1.0,
-      "latency_s": 0.6,
+      "latency_s": 18.3,
       "finish_reason": "stop",
       "detail": "out='4.0'"
     },
     {
       "id": "palindrome",
       "tier": "hard",
-      "score": 1.0,
-      "latency_s": 3.7,
-      "finish_reason": "stop",
-      "detail": "out='bab\\nbb\\na\\ngeeksskeeg'"
+      "score": 0.0,
+      "latency_s": 59.5,
+      "finish_reason": "length",
+      "detail": "out='[stderr]   File \"<string>\", line 9\\n    Here\\'s the complete P' [trunc:length]"
     },
     {
       "id": "parens",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 1.8,
+      "latency_s": 28.0,
       "finish_reason": "stop",
       "detail": "out='True\\nFalse\\nFalse\\nTrue'"
     },
@@ -91,7 +91,7 @@
       "id": "dedup_order",
       "tier": "hard",
       "score": 1.0,
-      "latency_s": 1.5,
+      "latency_s": 21.7,
       "finish_reason": "stop",
       "detail": "out='[3, 1, 2]\\n[[1], [2], [1, 2]]'"
     },
@@ -99,9 +99,9 @@
       "id": "rate_limiter",
       "tier": "hard",
       "score": 0.0,
-      "latency_s": 4.1,
-      "finish_reason": "stop",
-      "detail": "out=''"
+      "latency_s": 59.6,
+      "finish_reason": "length",
+      "detail": "out='[stderr]   File \"<string>\", line 9\\n    Here\\'s the complete, ' [trunc:length]"
     }
   ]
 }
