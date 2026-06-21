@@ -2,15 +2,15 @@
   "schema": "ai-benchy/concresult/1",
   "benchy_version": "0.1.0",
   "label": "Qwen3.6-27B",
-  "run_at": "2026-06-20T05:49:15Z",
+  "run_at": "2026-06-20T06:21:22Z",
   "endpoint": "http://127.0.0.1:1234",
-  "concurrency": 16,
+  "concurrency": 64,
   "config": {
     "backend": "vllm",
     "quant": "FP8",
     "max_num_seqs": 64,
     "max_tokens": 256,
-    "num_prompts": 64,
+    "num_prompts": 256,
     "no_think": true,
     "notes": "kv-cache fp8, enforce-eager, mtp spec-decode"
   },
@@ -35,16 +35,17 @@
     "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
   },
   "metrics": {
-    "ok": 64,
+    "ok": 256,
     "failed": 0,
-    "wall_s": 42.6,
-    "req_per_s": 1.5,
-    "agg_tok_s": 375.1,
-    "out_tokens": 15986,
-    "ttft_p50_s": 0.289,
-    "ttft_p99_s": 0.572,
-    "lat_p50_s": 10.42,
-    "lat_p99_s": 11.69,
-    "per_stream_tok_s": 25.0
+    "wall_s": 111.8,
+    "req_per_s": 2.29,
+    "agg_tok_s": 574.5,
+    "out_tokens": 64213,
+    "ttft_p50_s": 14.767,
+    "ttft_p99_s": 21.311,
+    "lat_p50_s": 26.32,
+    "lat_p99_s": 33.35,
+    "per_stream_tok_s": 10.0,
+    "token_source": "exact"
   }
 }
