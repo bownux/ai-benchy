@@ -1,15 +1,18 @@
 """FRONTIER suite — harder, GRADED tasks to separate top-tier models.
 
-The base suites saturate at the top (every good model scores 1.0 and ties), so these
-tasks return PARTIAL CREDIT — the fraction of hidden cases passed — instead of binary
-pass/fail, and they lean on the failure modes frontier models still trip on:
+The base suites saturate at the top (every good model ties at 1.0), so these tasks
+return PARTIAL CREDIT — the fraction of hidden cases passed — and lean on the failure
+modes frontier models still trip on:
 
 - interpreter:     write a real expression evaluator (precedence/associativity/unary
-                   minus), scored against 12 hidden expressions.
-- longctx:         pull 6 specific facts out of a long document salted with look-alike
-                   decoys (tests careful long-context recall, not just "find a needle").
+                   minus/modulo), graded against 24 hidden expressions.
+- longctx:         pull 12 facts (incl. multi-hop ones that chain two facts) out of a
+                   long document salted with look-alike decoys.
 - multi_incident:  a mocked-shell incident with TWO independent root causes; must find
-                   and propose a fix for BOTH, without wandering.
+                   and fix both, scored ALSO on how efficiently (fewer tool calls).
+
+v2 raised the difficulty after v1 saturated (3 of 4 top models maxed it): more/nastier
+interpreter expressions, multi-hop recall, and efficiency-scored triage.
 
 Judge-free & deterministic like the rest: model code is executed against a reference,
 recall answers are exact-matched, the agentic loop is scored by code. Every input is
@@ -27,11 +30,15 @@ def _norm(s):
 
 
 # ── interpreter: write evaluate(), run it on hidden expressions, grade the fraction ──
-# Standard precedence, left-associative, unary minus, integer division. All division
-# here is exact, so Python's own eval gives the same integer reference value.
+# Standard precedence, left-associative, unary minus, integer '/' and '%'. All division
+# is exact, so Python's own eval gives the same integer reference value. Several cases
+# (12%5*3, 2*3%4) only resolve correctly with '%' at the same precedence as '*' and '/'.
 _EXPRS = [
     "2+3*4", "(2+3)*4", "2*3+4*5", "-3+5", "-(3+4)*2", "2*(3+(4*5))",
     "100/4/5", "2+3*4-10/2", "((1+2)*(3+4))", "-2*-3", "7-3-2", "2*3*4+1",
+    "17%5", "100%7%4", "12%5*3", "2*3%4", "1000/8/5/5", "-(2*3)+(8/4)",
+    "((1+2)*(3+(4*(5-1))))", "2+2*2+2*2*2+2", "(7-2)*(7-2)-1", "50/(2+3)/2",
+    "-10+-20+-30", "3*(4+5*(6-2))",
 ]
 _EXPECT = [int(eval(e)) for e in _EXPRS]  # our own constant expressions, safe to eval
 
@@ -40,11 +47,11 @@ def f_interpreter(client):
     listing = "\n".join(_EXPRS)
     prompt = (
         "Write a COMPLETE Python program defining evaluate(expr: str) -> int that "
-        "evaluates an integer arithmetic expression. Support: + - * / , parentheses, "
-        "and unary minus. Rules: standard precedence (* and / bind tighter than + and "
-        "-), left-associative, and '/' is INTEGER division (inputs always divide "
-        "evenly). Do NOT use Python's eval or exec. Then, for each line below, print "
-        "evaluate(<that line>) on its own line, in order:\n\n" + listing
+        "evaluates an integer arithmetic expression. Support: + - * / % , parentheses, "
+        "and unary minus. Rules: * / % bind tighter than + and -, all are "
+        "left-associative, and '/' and '%' are INTEGER operations ('/' inputs always "
+        "divide evenly). Do NOT use Python's eval or exec. Then, for each line below, "
+        "print evaluate(<that line>) on its own line, in order:\n\n" + listing
     )
     out = run_py(extract_code(client.chat(
         [{"role": "user", "content": prompt}], max_tokens=4000).content))
@@ -59,24 +66,41 @@ def f_interpreter(client):
     return (got / len(_EXPRS), f"{got}/{len(_EXPRS)} exprs")
 
 
-# ── longctx: 6 real facts hidden in a long doc full of look-alike decoys ─────────────
-# (key, human-readable label, the verbatim value the model must return)
-_FACTS = [
-    ("prod_api_key",     "Helios PRODUCTION API key",            "HELIOS-PROD-7741"),
-    ("eu_west_oncall",   "on-call engineer for region eu-west",  "Priya Nair"),
-    ("maint_window_utc", "maintenance window start time in UTC", "02:00"),
-    ("rollback_build",   "rollback build number",                "5293"),
-    ("bridge_code",      "incident bridge code",                 "BRIDGE-8820"),
-    ("failover_target",  "database failover target replica",     "db-r3"),
-]
-# Each decoy is a near-miss for one of the facts above — same shape, different value.
-_DECOYS = [
+# ── longctx: 12 facts (incl. multi-hop) hidden in a long doc full of look-alike decoys ─
+# Three regions share an attribute schema (window / on-call / failover) so a multi-hop
+# question must chain one attribute to another. Each value is unique and appears once.
+_PLANTED = [
+    "The Helios PRODUCTION API key is HELIOS-PROD-7741.",
     "The Helios STAGING API key is HELIOS-STG-1100.",
-    "The on-call engineer for region us-east is Sam Lee.",
-    "The deploy window starts at 14:00 UTC on weekdays.",
+    "The rollback build number is 5293.",
     "The previous build number was 5290.",
-    "The status-page incident code is PAGE-2200.",
-    "The database read replica for analytics is db-r9.",
+    "The incident bridge code is BRIDGE-8820.",
+    "The status-page code is PAGE-2200.",
+    "Region eu-west: maintenance window 02:00 UTC, primary on-call Priya Nair, "
+    "database failover replica db-r3.",
+    "Region us-east: maintenance window 14:00 UTC, primary on-call Sam Lee, "
+    "database failover replica db-r9.",
+    "Region ap-south: maintenance window 19:30 UTC, primary on-call Mara Ito, "
+    "database failover replica db-r5.",
+]
+# (key, question shown to the model, verbatim expected value). The mh_* keys are
+# multi-hop: the model must resolve one attribute to find the region, then read another.
+_QUESTIONS = [
+    ("prod_api_key",     "the Helios PRODUCTION API key",                         "HELIOS-PROD-7741"),
+    ("staging_api_key",  "the Helios STAGING API key",                            "HELIOS-STG-1100"),
+    ("rollback_build",   "the rollback build number",                            "5293"),
+    ("previous_build",   "the previous build number",                            "5290"),
+    ("bridge_code",      "the incident bridge code",                             "BRIDGE-8820"),
+    ("statuspage_code",  "the status-page code",                                 "PAGE-2200"),
+    ("apsouth_oncall",   "the primary on-call for region ap-south",              "Mara Ito"),
+    ("euwest_failover",  "the database failover replica for region eu-west",     "db-r3"),
+    ("useast_failover",  "the database failover replica for region us-east",     "db-r9"),
+    ("mh_window_oncall", "the primary on-call for the region whose maintenance "
+                         "window is 02:00 UTC",                                  "Priya Nair"),
+    ("mh_oncall_failover", "the database failover replica for the region whose "
+                           "primary on-call is Mara Ito",                        "db-r5"),
+    ("mh_failover_window", "the maintenance window in UTC for the region whose "
+                           "database failover replica is db-r3",                 "02:00"),
 ]
 _WORDS = ("the system service config cluster node region metric latency request buffer "
           "cache index queue worker token window replica build deploy log alert policy "
@@ -97,13 +121,11 @@ def _filler(n_sentences, seed):
 
 
 def _build_doc():
-    facts = [f"The {label} is {val}." for _, label, val in _FACTS]
-    payload = facts + _DECOYS              # 12 planted lines, fact/decoy interleaved
     blocks = []
-    for i, line in enumerate(payload):
-        blocks.extend(_filler(12, 7 + i))  # ~12 filler sentences before each planted line
+    for i, line in enumerate(_PLANTED):
+        blocks.extend(_filler(16, 7 + i))  # ~2x the v1 filler, planted lines spread out
         blocks.append(line)
-    blocks.extend(_filler(12, 999))
+    blocks.extend(_filler(16, 999))
     return "\n".join(blocks)
 
 
@@ -111,11 +133,12 @@ _DOC = _build_doc()
 
 
 def f_longctx(client):
-    qlist = "\n".join(f'  "{k}": <{label}>' for k, label, _ in _FACTS)
+    qlist = "\n".join(f'  "{k}": <{q}>' for k, q, _ in _QUESTIONS)
     r = client.chat([
         {"role": "system", "content":
             "Answer ONLY from the document below. It contains similar-looking decoys; read "
-            "carefully and return the exact value asked for, not a near-match.\n\n" + _DOC},
+            "carefully and return the exact value asked for, not a near-match. Some questions "
+            "require chaining two facts about the same region.\n\n" + _DOC},
         {"role": "user", "content":
             "Return ONLY compact JSON (no prose, no code fence) with exactly these keys, "
             "each value taken verbatim from the document:\n" + qlist}],
@@ -126,15 +149,19 @@ def f_longctx(client):
     if m:
         try:
             d = json.loads(m.group())
-            for k, _, val in _FACTS:
+            for k, _, val in _QUESTIONS:
                 if _norm(val) and _norm(val) in _norm(str(d.get(k, ""))):
                     got += 1
         except Exception:
             pass
-    return (got / len(_FACTS), f"{got}/{len(_FACTS)} needles")
+    return (got / len(_QUESTIONS), f"{got}/{len(_QUESTIONS)} needles")
 
 
-# ── multi_incident: TWO independent root causes, must find and fix both ──────────────
+# ── multi_incident: TWO independent root causes; find/fix both, scored on efficiency ──
+_INC_MAX_TURNS = 18
+_INC_FAST = 6   # calls at/under this earn no efficiency penalty
+_INC_FLOOR = 0.7  # a correct-but-slow solve still scores this fraction (completeness wins)
+
 _INC_DF = ("Filesystem      Size  Used Avail Use% Mounted on\n"
            "/dev/sda1       456G  456G    0G 100% /\n"
            "tmpfs            16G  1.2M   16G   1% /run")
@@ -179,31 +206,38 @@ def f_multi_incident(client):
     state = {"wandered": False, "saw_df": False, "saw_log": False, "saw_port": False}
     final, calls, txt = _agentic_loop(client,
         "You are an SRE on a Linux server. Use run_shell (one command per call) to "
-        "investigate. This incident may have MORE THAN ONE root cause - find ALL of "
-        "them. When done, STOP calling tools and reply in plain text listing every root "
-        "cause AND a concrete fix for each.",
+        "investigate efficiently. This incident may have MORE THAN ONE root cause - find "
+        "ALL of them with as few commands as possible. When done, STOP calling tools and "
+        "reply in plain text listing every root cause AND a concrete fix for each.",
         "webapp.service keeps crash-looping and will not start. Find every root cause "
         "and how to fix it.",
-        lambda c: _incident_shell(c, state), max_turns=18)
+        lambda c: _incident_shell(c, state), max_turns=_INC_MAX_TURNS)
     low = (final + "\n" + txt).lower()
     disk = (("space" in low or "disk" in low or "full" in low or "app.log" in low)
             and any(w in low for w in ("truncate", "rotate", "logrotate", "delete",
                                        "rm ", ": >", "clear", "free up")))
     port = (("already in use" in low or "8080" in low or "stale" in low or "4821" in low)
             and any(w in low for w in ("kill", "pkill", "fuser", "stop", "terminate")))
-    score = 0.5 * (1 if (disk and state["saw_df"]) else 0) \
+    base = 0.5 * (1 if (disk and state["saw_df"]) else 0) \
         + 0.5 * (1 if (port and state["saw_port"]) else 0)
     if state["wandered"]:
-        score *= 0.5  # penalize chasing unrelated hosts/services
-    return (score, f"calls={calls} disk={disk} port={port} "
+        base *= 0.5  # penalize chasing unrelated hosts/services
+    # efficiency: full credit at/under _INC_FAST calls, decaying to _INC_FLOOR at the budget
+    if calls <= _INC_FAST:
+        eff = 1.0
+    else:
+        span = _INC_MAX_TURNS - _INC_FAST
+        eff = max(_INC_FLOOR, 1.0 - (calls - _INC_FAST) / span * (1.0 - _INC_FLOOR))
+    score = base * eff
+    return (score, f"calls={calls} eff={eff:.2f} disk={disk} port={port} "
                    f"df={state['saw_df']} portseen={state['saw_port']} "
                    f"wandered={state['wandered']}")
 
 
 SUITE = register(Suite(
-    name="frontier", version="1", needs="text",
-    blurb="Graded high-end tasks: real evaluator, long-context recall under decoys, "
-          "two-root-cause triage.",
+    name="frontier", version="2", needs="text",
+    blurb="Graded high-end tasks: real evaluator (24 exprs), long-context recall with "
+          "multi-hop + decoys, efficiency-scored two-root-cause triage.",
     tasks=[
         Task("interpreter", "code", f_interpreter),     # executes model code (--no-exec skips)
         Task("longctx", "recall", f_longctx),
