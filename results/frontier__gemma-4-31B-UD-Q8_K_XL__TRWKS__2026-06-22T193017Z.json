@@ -1,0 +1,88 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "frontier",
+  "suite_version": "1",
+  "label": "gemma-4-31B-UD-Q8_K_XL",
+  "run_at": "2026-06-22T19:30:17Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "gemma-4-31B",
+  "model": {
+    "backend": "llama.cpp",
+    "quant": "UD-Q8_K_XL",
+    "params_b": 31.0,
+    "notes": "Unsloth Dynamic Q8_K_XL GGUF on RTX PRO 6000 Blackwell"
+  },
+  "options": {
+    "no_think": false
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+        "vram_mb": 97887,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB"
+  },
+  "scores": {
+    "total": 3.0,
+    "max": 3,
+    "tiers": {
+      "code": [
+        1.0,
+        1
+      ],
+      "recall": [
+        1.0,
+        1
+      ],
+      "agentic": [
+        1.0,
+        1
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 39.05,
+    "gen_n": 256,
+    "prefill_tps": 330.48
+  },
+  "tasks": [
+    {
+      "id": "interpreter",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 49.4,
+      "finish_reason": "stop",
+      "detail": "12/12 exprs"
+    },
+    {
+      "id": "longctx",
+      "tier": "recall",
+      "score": 1.0,
+      "latency_s": 15.8,
+      "finish_reason": "stop",
+      "detail": "6/6 needles"
+    },
+    {
+      "id": "multi_incident",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 27.5,
+      "finish_reason": "stop",
+      "detail": "calls=5 disk=True port=True df=True portseen=True wandered=False"
+    }
+  ]
+}

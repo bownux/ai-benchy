@@ -119,7 +119,7 @@ def f_longctx(client):
         {"role": "user", "content":
             "Return ONLY compact JSON (no prose, no code fence) with exactly these keys, "
             "each value taken verbatim from the document:\n" + qlist}],
-        max_tokens=500)
+        max_tokens=1000)  # headroom so a verbose model isn't scored on a truncated answer
     raw = r.content.strip()
     m = re.search(r"\{.*\}", raw, re.S)
     got = 0
