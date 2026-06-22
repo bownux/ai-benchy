@@ -59,5 +59,5 @@ def _load_all():
     global _loaded
     if _loaded:
         return
-    from . import coding, reasoning, agentic, vision  # noqa: F401  (each calls register())
+    from . import coding, reasoning, agentic, vision, frontier  # noqa: F401  (each calls register())
     _loaded = True
