@@ -77,3 +77,60 @@ def leaderboard(paths):
                          f"| {tp if tp is not None else '—'} | {backend} | {hw} | {when} |")
         lines.append("")
     return "\n".join(lines)
+
+
+# ── concurrency leaderboard (from `benchy.concbench --out` files) ────────────
+CONCRESULT_SCHEMA = "ai-benchy/concresult/1"
+
+
+def _conc_sig(r):
+    """Group key: throughput under load is bound to BOTH hardware and server config,
+    so a different backend/quant/max_num_seqs is a different row — never conflated."""
+    c = r.get("config", {})
+    return (r.get("label", "?"), r.get("hardware", {}).get("gpu_summary", "?"),
+            c.get("backend"), c.get("quant"), c.get("max_num_seqs"), c.get("no_think"))
+
+
+def _agg(r):
+    return r.get("metrics", {}).get("agg_tok_s") or 0
+
+
+def conc_leaderboard(paths):
+    rows = [r for r in _load(paths) if r.get("schema") == CONCRESULT_SCHEMA]
+    lines = ["# ai-benchy concurrency leaderboard", ""]
+    if not rows:
+        return "\n".join(lines + ["_no concurrency results found — generate with "
+                                  "`python -m benchy.concbench --out results/ ...`._"])
+    # group by config, then keep the best run per concurrency level within each group
+    groups, levels = {}, set()
+    for r in rows:
+        g = groups.setdefault(_conc_sig(r), {})
+        c = r.get("concurrency")
+        levels.add(c)
+        if c not in g or _agg(r) > _agg(g[c]):
+            g[c] = r
+    levels = sorted(x for x in levels if x is not None)
+
+    lines += ["<!-- generated: `python -m benchy compare-conc results/ > CONC_LEADERBOARD.md` -->", "",
+              "Aggregate output tok/s under concurrent load — higher means the server batches "
+              "better. This is bound to **hardware AND server config**, so rows are grouped by "
+              "backend, quant, and `max_num_seqs`; compare within a config, not across hardware.", ""]
+    head = ["Model", "Backend · Quant", "max_seqs", "Hardware"] + \
+           [f"c={c}" for c in levels] + ["peak tok/s @ c"]
+    lines += ["| " + " | ".join(head) + " |", "|" + "|".join(["---"] * len(head)) + "|"]
+
+    def peak(g):
+        best = max(g.values(), key=_agg)
+        return _agg(best), best.get("concurrency")
+
+    for sig in sorted(groups, key=lambda s: -peak(groups[s])[0]):
+        g = groups[sig]
+        label, hw, backend, quant, mseq, _ = sig
+        bq = " · ".join(x for x in (backend, quant) if x) or "—"
+        cells = [f"{_agg(g[c]):.0f}" if c in g else "—" for c in levels]
+        pk_v, pk_c = peak(g)
+        row = [f"**{label}**", bq, str(mseq) if mseq is not None else "—", hw] + \
+              cells + [f"{pk_v:.0f} @ {pk_c}"]
+        lines.append("| " + " | ".join(row) + " |")
+    lines.append("")
+    return "\n".join(lines)

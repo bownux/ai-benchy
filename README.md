@@ -87,6 +87,27 @@ Stdlib-only and OpenAI-compatible like the rest of benchy. Pass `--no-think` on 
 reasoning model so output length is bounded and TTFT is meaningful. Note: llama.cpp
 serializes requests unless you start `llama-server` with `--parallel N`.
 
+### Concurrency leaderboard
+
+Add `--out results/` (plus the config flags) and each run writes a self-describing
+`concresult` JSON; `compare-conc` merges them into a throughput-vs-concurrency table:
+
+```bash
+for c in 1 4 16 32; do python -m benchy.concbench --endpoint http://127.0.0.1:1234 \
+    --model qwen3-27b --label qwen3-27b --no-think --out results/ \
+    --backend vllm --quant FP8 --max-num-seqs 64 \
+    --concurrency $c --num-prompts $((c*4)); done
+
+python -m benchy compare-conc results/ > CONC_LEADERBOARD.md
+```
+
+This is **separate** from the capability leaderboard on purpose: it measures the
+*server* (backend + hardware + config), not the model. Aggregate throughput swings
+wildly with server flags — `--max-num-seqs 1` vs `64` is easily a 10–20× difference —
+so rows are grouped by backend, quant, and `max_num_seqs`, and you should compare
+within a config, not across hardware. Record `--max-num-seqs` (it can't be read back
+from the API) so two different setups never collapse into one row.
+
 ## Comparing across machines
 
 The result JSON is the unit of sharing. To compare with a friend:

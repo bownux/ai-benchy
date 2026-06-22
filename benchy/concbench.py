@@ -17,8 +17,10 @@ Sweep concurrency to find where throughput plateaus and TTFT blows up:
     for c in 1 4 8 16 32; do python -m benchy.concbench ... --concurrency $c; done
 """
 from __future__ import annotations
-import argparse, json, time, urllib.request, urllib.error, random
+import argparse, json, os, time, urllib.request, urllib.error, random
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+CONCRESULT_SCHEMA = "ai-benchy/concresult/1"
 
 # A few distinct prompts so a prefix cache can't inflate throughput by serving
 # every request from the same cached prefix. Each request also gets a unique nonce.
@@ -113,6 +115,16 @@ def main():
     ap.add_argument("--no-think", action="store_true",
                     help="send chat_template_kwargs enable_thinking=false (recommended for a "
                          "clean throughput test — bounds output length and makes TTFT meaningful)")
+    ap.add_argument("--label", default=None, help="short name for this run (default: --model)")
+    ap.add_argument("--out", default=None,
+                    help="dir to write a concresult JSON for `python -m benchy compare-conc`")
+    # Config that DOMINATES concurrency throughput but can't be read back from the API —
+    # record it so the leaderboard never conflates two different server setups.
+    ap.add_argument("--backend", default=None, help="vllm | llama.cpp | ollama | ...")
+    ap.add_argument("--quant", default=None, help="e.g. FP8, Q4_K_M")
+    ap.add_argument("--max-num-seqs", type=int, default=None,
+                    help="the server's --max-num-seqs (the single biggest batching knob)")
+    ap.add_argument("--notes", default=None, help="freeform (other server flags, etc.)")
     a = ap.parse_args()
     if a.concurrency < 1 or a.num_prompts < 1:
         ap.error("--concurrency and --num-prompts must be >= 1")
@@ -155,21 +167,66 @@ def main():
     exact = bool(ok) and all(r[5] for r in ok)
     unit = "tok/s" if exact else "tok/s~"
 
+    def r2(x, nd=2):
+        return round(x, nd) if x is not None else None
+
+    metrics = {
+        "ok": len(ok), "failed": len(failed), "wall_s": round(wall, 1),
+        "req_per_s": r2(len(ok) / wall) if wall else None,
+        "agg_tok_s": r2(out_tokens / wall, 1) if wall else None,
+        "out_tokens": out_tokens,
+        "ttft_p50_s": r2(percentile(ttfts, 50), 3), "ttft_p99_s": r2(percentile(ttfts, 99), 3),
+        "lat_p50_s": r2(percentile(lats, 50)), "lat_p99_s": r2(percentile(lats, 99)),
+        "per_stream_tok_s": r2(out_tokens / sum(lats), 1) if lats and sum(lats) else None,
+        "token_source": "exact" if exact else "approx",  # usage vs streamed-delta fallback
+    }
+
     print("\n=== results ===")
-    print(f"  ok={len(ok)}/{len(results)}  failed={len(failed)}  wall={wall:.1f}s")
-    print(f"  request throughput : {len(ok) / wall:.2f} req/s")
-    print(f"  aggregate output   : {out_tokens / wall:.1f} {unit}  ({out_tokens} tokens total)")
+    print(f"  ok={metrics['ok']}/{len(results)}  failed={metrics['failed']}  wall={metrics['wall_s']}s")
+    print(f"  request throughput : {metrics['req_per_s']} req/s")
+    print(f"  aggregate output   : {metrics['agg_tok_s']} {unit}  ({out_tokens} tokens total)")
     if ttfts:
-        print(f"  TTFT   p50/p99     : {percentile(ttfts, 50):.3f}s / {percentile(ttfts, 99):.3f}s")
+        print(f"  TTFT   p50/p99     : {metrics['ttft_p50_s']}s / {metrics['ttft_p99_s']}s")
     if lats:
-        print(f"  latency p50/p99    : {percentile(lats, 50):.2f}s / {percentile(lats, 99):.2f}s")
-    per_req = out_tokens / sum(lats) if lats and sum(lats) else 0
-    print(f"  per-stream rate    : {per_req:.1f} {unit}  (avg single-stream)")
+        print(f"  latency p50/p99    : {metrics['lat_p50_s']}s / {metrics['lat_p99_s']}s")
+    print(f"  per-stream rate    : {metrics['per_stream_tok_s']} {unit}  (avg single-stream)")
     if failed:
         print(f"  first error        : {failed[0][4]}")
     src = ("exact (server usage.completion_tokens)" if exact
            else "~approx — some servers omitted usage; counted streamed deltas (not 1 token each)")
     print(f"  token source       : {src}")
+
+    if a.out:
+        _write_result(a, base, metrics)
+
+
+def _write_result(a, base, metrics):
+    """Write a self-describing concresult JSON for `benchy compare-conc`. Reuses benchy's
+    hwinfo so the run is stamped with auto-detected hardware, like a normal benchy result."""
+    try:
+        from benchy import hwinfo, __version__ as bver
+        hw = hwinfo.detect()
+    except Exception:
+        import socket
+        hw, bver = {"host": socket.gethostname(), "gpu_summary": "?"}, None
+    label = a.label or a.model
+    run_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    config = {k: v for k, v in (("backend", a.backend), ("quant", a.quant),
+                                ("max_num_seqs", a.max_num_seqs), ("max_tokens", a.max_tokens),
+                                ("num_prompts", a.num_prompts), ("no_think", a.no_think),
+                                ("notes", a.notes)) if v is not None}
+    rec = {
+        "schema": CONCRESULT_SCHEMA, "benchy_version": bver,
+        "label": label, "run_at": run_at, "endpoint": base,
+        "concurrency": a.concurrency, "config": config,
+        "hardware": hw, "metrics": metrics,
+    }
+    os.makedirs(a.out, exist_ok=True)
+    safe = "".join(c if c.isalnum() or c in "-._" else "_" for c in label)
+    fn = f"conc__{safe}__{hw.get('host', 'host')}__c{a.concurrency:02d}__{run_at.replace(':', '')}.json"
+    path = os.path.join(a.out, fn)
+    json.dump(rec, open(path, "w"), indent=2)
+    print(f"  wrote {path}")
 
 
 if __name__ == "__main__":

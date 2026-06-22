@@ -1,0 +1,51 @@
+{
+  "schema": "ai-benchy/concresult/1",
+  "benchy_version": "0.1.0",
+  "label": "Qwen3.6-27B",
+  "run_at": "2026-06-20T06:19:30Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "concurrency": 48,
+  "config": {
+    "backend": "vllm",
+    "quant": "FP8",
+    "max_num_seqs": 64,
+    "max_tokens": 256,
+    "num_prompts": 192,
+    "no_think": true,
+    "notes": "kv-cache fp8, enforce-eager, mtp spec-decode"
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 5000 Blackwell",
+        "vram_mb": 48935,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
+  },
+  "metrics": {
+    "ok": 192,
+    "failed": 0,
+    "wall_s": 82.4,
+    "req_per_s": 2.33,
+    "agg_tok_s": 584.1,
+    "out_tokens": 48115,
+    "ttft_p50_s": 8.966,
+    "ttft_p99_s": 12.83,
+    "lat_p50_s": 19.73,
+    "lat_p99_s": 24.81,
+    "per_stream_tok_s": 13.5,
+    "token_source": "exact"
+  }
+}
