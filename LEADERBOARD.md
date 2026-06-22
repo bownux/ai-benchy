@@ -4,7 +4,7 @@
 
 Scores are out of each suite's task count; tiers show the breakdown. `gen tok/s` is throughput on the **runner's** hardware (shown in the last column), so compare capability across rows and speed only within the same hardware.
 
-## agentic  (suite v1, 10 runs)
+## agentic  (suite v1, 11 runs)
 
 | Model | Score | Tiers | gen tok/s | Backend · Quant | Hardware | Run |
 |---|---|---|---|---|---|---|
@@ -16,14 +16,16 @@ Scores are out of each suite's task count; tiers show the breakdown. `gen tok/s`
 | **Qwen3.6-35B-A3B** | 3/4 | core 1/2 · agentic 2/2 | 193.8 | llama.cpp | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-13 |
 | **Qwen3.6-27B** | 3/4 | core 1/2 · agentic 2/2 | 64.86 | llama.cpp | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-13 |
 | **Qwen3.6-27B-FP8** | 3/4 | core 2/2 · agentic 1/2 | 59.52 | vllm · FP8 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-19 |
+| **gemma-4-31B-UD-Q8_K_XL** | 3/4 | core 2/2 · agentic 1/2 | 38.29 | llama.cpp · UD-Q8_K_XL | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
 | **gemma-4-31B** | 3/4 | core 2/2 · agentic 1/2 | 31.51 | llama.cpp · Q8_0 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-21 |
 | **gemma-4-31B-UD-Q8_K_XL** | 3/4 | core 2/2 · agentic 1/2 | 30.35 | llama.cpp · UD-Q8_K_XL | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-21 |
 
-## coding  (suite v1, 10 runs)
+## coding  (suite v1, 11 runs)
 
 | Model | Score | Tiers | gen tok/s | Backend · Quant | Hardware | Run |
 |---|---|---|---|---|---|---|
 | **gpt-oss-120b** | 6/6 | code 2/2 · hard 4/4 | 93.45 | llama.cpp · MXFP4 | NVIDIA GeForce RTX 3080 Ti 12GB, AMD Radeon AI PRO R9700 31GB, AMD Radeon AI PRO R9700 31GB, AMD Radeon AI PRO R9700 31GB | 2026-06-11 |
+| **gemma-4-31B-UD-Q8_K_XL** | 6/6 | code 2/2 · hard 4/4 | 38.94 | llama.cpp · UD-Q8_K_XL | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
 | **gemma-4-31B** | 6/6 | code 2/2 · hard 4/4 | 31.46 | llama.cpp · Q8_0 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-21 |
 | **gemma-4-31B-UD-Q8_K_XL** | 6/6 | code 2/2 · hard 4/4 | 30.18 | llama.cpp · UD-Q8_K_XL | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-21 |
 | **Qwen3.6-35B-A3B** | 5/6 | code 2/2 · hard 3/4 | 198.43 | llama.cpp | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-13 |
@@ -34,13 +36,14 @@ Scores are out of each suite's task count; tiers show the breakdown. `gen tok/s`
 | **Qwen3.6-27B-FP8-nothink** | 5/6 | code 2/2 · hard 3/4 | 33.58 | vllm · FP8 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-19 |
 | **Qwen3.6-27B-FP8** | 4/6 | code 2/2 · hard 2/4 | 60.13 | vllm · FP8 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-19 |
 
-## reasoning  (suite v1, 10 runs)
+## reasoning  (suite v1, 11 runs)
 
 | Model | Score | Tiers | gen tok/s | Backend · Quant | Hardware | Run |
 |---|---|---|---|---|---|---|
 | **Qwen3.6-35B-A3B-Q6-nothink** | 4/4 | core 4/4 | 168.77 | llama.cpp · Q6_K | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-13 |
 | **Qwen3-Coder-Next** | 4/4 | core 4/4 | 126.21 | llama.cpp · UD-IQ4_XS | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-14 |
 | **Qwen3.6-27B-nothink** | 4/4 | core 4/4 | 45.08 | llama.cpp | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-13 |
+| **gemma-4-31B-UD-Q8_K_XL** | 4/4 | core 4/4 | 38.81 | llama.cpp · UD-Q8_K_XL | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
 | **Qwen3.6-27B-FP8-nothink** | 4/4 | core 4/4 | 38.74 | vllm · FP8 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-19 |
 | **gemma-4-31B** | 4/4 | core 4/4 | 31.52 | llama.cpp · Q8_0 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-21 |
 | **gemma-4-31B-UD-Q8_K_XL** | 4/4 | core 4/4 | 30.07 | llama.cpp · UD-Q8_K_XL | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-21 |
