@@ -1,0 +1,92 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "agentic",
+  "suite_version": "1",
+  "label": "Qwen3-Coder-Next-UD-Q6_K",
+  "run_at": "2026-06-22T14:06:17Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "Qwen3-Coder-Next",
+  "model": {
+    "backend": "llama.cpp",
+    "quant": "UD-Q6_K",
+    "ctx": 131072,
+    "params_b": 79.7,
+    "notes": "Unsloth Dynamic Q6_K GGUF on RTX PRO 6000 Blackwell (overflows 47GB; needs the 95GB card)"
+  },
+  "options": {
+    "no_think": false
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+        "vram_mb": 97887,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB"
+  },
+  "scores": {
+    "total": 4.0,
+    "max": 4,
+    "tiers": {
+      "core": [
+        2.0,
+        2
+      ],
+      "agentic": [
+        2.0,
+        2
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 159.49,
+    "prefill_tps": 117.02
+  },
+  "tasks": [
+    {
+      "id": "tool_call",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.5,
+      "finish_reason": "tool_calls",
+      "detail": "args={'city': 'Tokyo', 'unit': 'c'}"
+    },
+    {
+      "id": "doc_follow",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.4,
+      "finish_reason": "stop",
+      "detail": "raw='orchard release --channel beta --build 1234'"
+    },
+    {
+      "id": "disk_full",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 7.6,
+      "finish_reason": "stop",
+      "detail": "calls=14 df=True culprit=True fix=True wandered=False"
+    },
+    {
+      "id": "crash_loop",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 7.2,
+      "finish_reason": "stop",
+      "detail": "calls=16 sawlog=True root=True wandered=False"
+    }
+  ]
+}
