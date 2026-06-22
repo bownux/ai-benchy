@@ -1,0 +1,107 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "coding",
+  "suite_version": "1",
+  "label": "gemma-4-31B-UD-Q8_K_XL",
+  "run_at": "2026-06-21T03:37:12Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "gemma-4-31B",
+  "model": {
+    "backend": "llama.cpp",
+    "quant": "UD-Q8_K_XL",
+    "params_b": 31.0,
+    "notes": "Unsloth Dynamic Q8_K_XL GGUF on RTX PRO 5000 Blackwell"
+  },
+  "options": {
+    "no_think": false
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 5000 Blackwell",
+        "vram_mb": 48935,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB"
+  },
+  "scores": {
+    "total": 6.0,
+    "max": 6,
+    "tiers": {
+      "code": [
+        2.0,
+        2
+      ],
+      "hard": [
+        4.0,
+        4
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 30.18,
+    "prefill_tps": 85.2
+  },
+  "tasks": [
+    {
+      "id": "fib",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 34.7,
+      "finish_reason": "stop",
+      "detail": "out='55'"
+    },
+    {
+      "id": "bugfix",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 9.3,
+      "finish_reason": "stop",
+      "detail": "out='4.0'"
+    },
+    {
+      "id": "palindrome",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 29.3,
+      "finish_reason": "stop",
+      "detail": "out='bab\\nbb\\na\\ngeeksskeeg'"
+    },
+    {
+      "id": "parens",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 28.6,
+      "finish_reason": "stop",
+      "detail": "out='True\\nFalse\\nFalse\\nTrue'"
+    },
+    {
+      "id": "dedup_order",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 16.9,
+      "finish_reason": "stop",
+      "detail": "out='[3, 1, 2]\\n[[1], [2], [1, 2]]'"
+    },
+    {
+      "id": "rate_limiter",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 46.3,
+      "finish_reason": "stop",
+      "detail": "out='[True, True, False, True, False]'"
+    }
+  ]
+}

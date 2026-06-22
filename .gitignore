@@ -6,3 +6,5 @@ venv/
 .DS_Store
 /tmp/
 benchy-images/
+*.log
+.idea/

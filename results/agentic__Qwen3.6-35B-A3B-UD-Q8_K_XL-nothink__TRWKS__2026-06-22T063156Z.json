@@ -1,0 +1,92 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "agentic",
+  "suite_version": "1",
+  "label": "Qwen3.6-35B-A3B-UD-Q8_K_XL-nothink",
+  "run_at": "2026-06-22T06:31:56Z",
+  "endpoint": "http://127.0.0.1:1234",
+  "served_model_id": "Qwen3.6-35B-A3B",
+  "model": {
+    "backend": "llama.cpp",
+    "quant": "UD-Q8_K_XL",
+    "ctx": 131072,
+    "params_b": 35.5,
+    "notes": "Unsloth Dynamic Q8_K_XL GGUF on RTX PRO 6000 Blackwell"
+  },
+  "options": {
+    "no_think": true
+  },
+  "hardware": {
+    "host": "TRWKS",
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD64 Family 26 Model 8 Stepping 1, AuthenticAMD",
+    "cores": 64,
+    "ram_gb": null,
+    "gpus": [
+      {
+        "name": "NVIDIA GeForce RTX 3090",
+        "vram_mb": 24576,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+        "vram_mb": 97887,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB"
+  },
+  "scores": {
+    "total": 4.0,
+    "max": 4,
+    "tiers": {
+      "core": [
+        2.0,
+        2
+      ],
+      "agentic": [
+        2.0,
+        2
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 82.99,
+    "prefill_tps": 176.17
+  },
+  "tasks": [
+    {
+      "id": "tool_call",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.6,
+      "finish_reason": "tool_calls",
+      "detail": "args={'city': 'Tokyo', 'unit': 'c'}"
+    },
+    {
+      "id": "doc_follow",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.3,
+      "finish_reason": "stop",
+      "detail": "raw='orchard release --channel beta --build 1234'"
+    },
+    {
+      "id": "disk_full",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 14.1,
+      "finish_reason": "stop",
+      "detail": "calls=14 df=True culprit=True fix=True wandered=False"
+    },
+    {
+      "id": "crash_loop",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 5.1,
+      "finish_reason": "stop",
+      "detail": "calls=3 sawlog=True root=True wandered=False"
+    }
+  ]
+}
