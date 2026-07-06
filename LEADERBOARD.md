@@ -52,6 +52,16 @@ Scores are out of each suite's task count; tiers show the breakdown. `gen tok/s`
 | **Qwen3.6-27B-BF16-nothink** | 5/6 | code 2/2 · hard 3/4 | 18.63 | llama.cpp · BF16 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
 | **Qwen3.6-27B-FP8** | 4/6 | code 2/2 · hard 2/4 | 60.13 | vllm · FP8 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 5000 Blackwell 47GB | 2026-06-19 |
 
+## frontier  (suite v2, 5 runs)
+
+| Model | Score | Tiers | gen tok/s | Backend · Quant | Hardware | Run |
+|---|---|---|---|---|---|---|
+| **gpt-oss-120b-Q8** | 3/3 | code 1/1 · recall 1/1 · agentic 1/1 | 182.51 | llama.cpp · Q8 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
+| **gemma-4-31B-UD-Q8_K_XL-nothink** | 2.96/3 | code 0.96/1 · recall 1/1 · agentic 1/1 | 39.05 | llama.cpp · UD-Q8_K_XL | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
+| **Qwen3.6-35B-A3B-UD-Q6_K_XL-nothink** | 2.7/3 | code 1/1 · recall 1/1 · agentic 0.7/1 | 249.61 | llama.cpp · UD-Q6_K_XL | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
+| **Qwen3-Coder-Next-UD-Q6_K** | 2.7/3 | code 1/1 · recall 1/1 · agentic 0.7/1 | 183.75 | llama.cpp · UD-Q6_K | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
+| **Qwen3.6-27B-BF16-nothink** | 2/3 | code 1/1 · recall 1/1 · agentic 0/1 | 23.86 | llama.cpp · BF16 | NVIDIA GeForce RTX 3090 24GB, NVIDIA RTX PRO 6000 Blackwell Workstation Edition 95GB | 2026-06-22 |
+
 ## reasoning  (suite v1, 19 runs)
 
 | Model | Score | Tiers | gen tok/s | Backend · Quant | Hardware | Run |

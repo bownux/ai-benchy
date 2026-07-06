@@ -16,6 +16,12 @@ def _now_iso():
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
+def _fmt(x):
+    # show graded (fractional) scores without noise: 6.0 -> "6", 2.5 -> "2.5"
+    s = f"{x:.2f}".rstrip("0").rstrip(".")
+    return s or "0"
+
+
 def run_suite(suite_name, endpoint, label, model_meta=None, out_dir="results",
               skip_exec=False, api_key=None, model_name="benchy", quiet=False, no_think=False):
     suite = get(suite_name)
@@ -53,7 +59,7 @@ def run_suite(suite_name, endpoint, label, model_meta=None, out_dir="results",
         tasks_out.append({"id": task.id, "tier": task.tier, "score": score,
                           "latency_s": dt, "finish_reason": fr, "detail": detail})
         if not quiet:
-            print(f"  [{task.tier:<7}] {task.id:<16} {score:.0f}  {detail[:56]}  {dt}s")
+            print(f"  [{task.tier:<7}] {task.id:<16} {_fmt(score):<4} {detail[:56]}  {dt}s")
 
     n = len(tasks_out)
     tput = client.measure_throughput()
@@ -65,8 +71,8 @@ def run_suite(suite_name, endpoint, label, model_meta=None, out_dir="results",
         "model": model_meta or {},
         "options": {"no_think": no_think},
         "hardware": hw,
-        "scores": {"total": round(total, 1), "max": n,
-                   "tiers": {t: [round(tier_tot[t], 1), tier_max[t]] for t in tier_tot}},
+        "scores": {"total": round(total, 2), "max": n,
+                   "tiers": {t: [round(tier_tot[t], 2), tier_max[t]] for t in tier_tot}},
         "throughput": tput,
         "tasks": tasks_out,
     }
@@ -75,7 +81,7 @@ def run_suite(suite_name, endpoint, label, model_meta=None, out_dir="results",
     path = os.path.join(out_dir, f"{suite.name}__{safe}__{hw['host']}__{result['run_at'].replace(':','')}.json")
     json.dump(result, open(path, "w"), indent=2)
     if not quiet:
-        tiers = "  ".join(f"{t} {tier_tot[t]:.0f}/{tier_max[t]}" for t in sorted(tier_tot))
-        print(f"SCORE: {total:.0f}/{n}   {tiers}   |   gen ~{tput.get('gen_tps')} tok/s")
+        tiers = "  ".join(f"{t} {_fmt(tier_tot[t])}/{tier_max[t]}" for t in sorted(tier_tot))
+        print(f"SCORE: {_fmt(total)}/{n}   {tiers}   |   gen ~{tput.get('gen_tps')} tok/s")
         print(f"wrote {path}")
     return result, path

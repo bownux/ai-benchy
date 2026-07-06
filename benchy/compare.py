@@ -21,9 +21,15 @@ def _load(paths):
     return out
 
 
+def _fmt(x):
+    # show graded (fractional) scores without noise: 6.0 -> "6", 2.5 -> "2.5"
+    s = f"{x:.2f}".rstrip("0").rstrip(".")
+    return s or "0"
+
+
 def _tier_str(scores):
     t = scores.get("tiers", {})
-    return " · ".join(f"{k} {v[0]:.0f}/{v[1]}" for k, v in t.items()) or "-"
+    return " · ".join(f"{k} {_fmt(v[0])}/{v[1]}" for k, v in t.items()) or "-"
 
 
 def _rank(r):
@@ -73,7 +79,7 @@ def leaderboard(paths):
             hw = r.get("hardware", {}).get("gpu_summary", "?")
             tp = r["throughput"].get("gen_tps")
             when = (r.get("run_at", "") or "")[:10]
-            lines.append(f"| **{r.get('label','?')}** | {s['total']:.0f}/{s['max']} | {_tier_str(s)} "
+            lines.append(f"| **{r.get('label','?')}** | {_fmt(s['total'])}/{s['max']} | {_tier_str(s)} "
                          f"| {tp if tp is not None else '—'} | {backend} | {hw} | {when} |")
         lines.append("")
     return "\n".join(lines)
