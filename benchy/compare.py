@@ -15,7 +15,11 @@ def _load(paths):
             out += _load(sorted(glob.glob(os.path.join(p, "*.json"))))
         else:
             try:
-                out.append(json.load(open(p)))
+                r = json.load(open(p))
+                # results/ can hold sibling artifacts (e.g. concurrency_probe
+                # output) that aren't suite runs — only rows with scores render
+                if isinstance(r, dict) and "scores" in r:
+                    out.append(r)
             except Exception:
                 pass
     return out

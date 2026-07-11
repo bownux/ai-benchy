@@ -1,0 +1,288 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "vision",
+  "suite_version": "1",
+  "label": "qwen3-vl-8b",
+  "run_at": "2026-06-14T08:18:07Z",
+  "endpoint": "http://127.0.0.1:8081",
+  "served_model_id": "qwen3-vl-8b",
+  "model": {
+    "name": "Qwen3-VL-8B-Instruct",
+    "backend": "llama.cpp",
+    "quant": "IQ4_XS",
+    "ctx": 4096,
+    "params_b": 8.0,
+    "notes": "RTX 3080 Ti / CUDA sm_86 / opt/llama-cuda; post-migration 2026-06-14"
+  },
+  "options": {
+    "no_think": false
+  },
+  "hardware": {
+    "host": "RogGentoo",
+    "os": "Linux-6.18.31-gentoo-dist-x86_64-AMD_Ryzen_Threadripper_9970X_32-Cores-with-glibc2.42",
+    "cpu": "AMD Ryzen Threadripper 9970X 32-Cores",
+    "cores": 64,
+    "ram_gb": 125.1,
+    "gpus": [
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA GeForce RTX 3080 Ti",
+        "vram_mb": 12288,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA GeForce RTX 3080 Ti 12GB, NVIDIA RTX PRO 4500 Blackwell 31GB"
+  },
+  "scores": {
+    "total": 24.0,
+    "max": 27,
+    "tiers": {
+      "core": [
+        12.0,
+        13
+      ],
+      "hard": [
+        12.0,
+        14
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 144.89,
+    "gen_n": 256,
+    "prefill_tps": 2453.02
+  },
+  "tasks": [
+    {
+      "id": "ocr_code",
+      "tier": "core",
+      "score": 0.0,
+      "latency_s": 0.3,
+      "finish_reason": "stop",
+      "detail": "ans='Order: 0r0d: 0QX 74821-BB'"
+    },
+    {
+      "id": "ocr_fields",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='137.50'"
+    },
+    {
+      "id": "count_circles",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='7'"
+    },
+    {
+      "id": "count_red",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='4'"
+    },
+    {
+      "id": "largest_color",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='green'"
+    },
+    {
+      "id": "shape_id",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='triangle'"
+    },
+    {
+      "id": "spatial",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='red'"
+    },
+    {
+      "id": "spatial_shape",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='triangle'"
+    },
+    {
+      "id": "chart_max",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='D'"
+    },
+    {
+      "id": "chart_min",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='A'"
+    },
+    {
+      "id": "table_json",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.3,
+      "finish_reason": "stop",
+      "detail": "ans='{\\n  \"Apples\": 12,\\n  \"Mangoes\": 5,\\n  \"Pears\": 9\\n}'"
+    },
+    {
+      "id": "compare_size",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='right'"
+    },
+    {
+      "id": "grid_center",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='K'"
+    },
+    {
+      "id": "ocr_confusable",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
+      "detail": "ans='RX80-9KQ4-7ZW2-J3H6'"
+    },
+    {
+      "id": "ocr_smallprint",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
+      "detail": "ans='99XK-220841-Q8'"
+    },
+    {
+      "id": "ocr_rotated",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='7741'"
+    },
+    {
+      "id": "ocr_reading",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='1932'"
+    },
+    {
+      "id": "ocr_math",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='82'"
+    },
+    {
+      "id": "count_many",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='17'"
+    },
+    {
+      "id": "count_2attr",
+      "tier": "hard",
+      "score": 0.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
+      "detail": "ans='4'"
+    },
+    {
+      "id": "chart_threshold",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='3'"
+    },
+    {
+      "id": "chart_diff",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.2,
+      "finish_reason": "stop",
+      "detail": "ans='120'"
+    },
+    {
+      "id": "line_trend",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='increasing'"
+    },
+    {
+      "id": "spatial_relative",
+      "tier": "hard",
+      "score": 0.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='blue'"
+    },
+    {
+      "id": "table_cell",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='$7'"
+    },
+    {
+      "id": "table_sum",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='56'"
+    },
+    {
+      "id": "odd_one_out",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 0.1,
+      "finish_reason": "stop",
+      "detail": "ans='4'"
+    }
+  ]
+}

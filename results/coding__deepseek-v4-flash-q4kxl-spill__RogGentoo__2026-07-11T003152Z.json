@@ -1,0 +1,118 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "coding",
+  "suite_version": "1",
+  "label": "deepseek-v4-flash-q4kxl-spill",
+  "run_at": "2026-07-11T00:31:52Z",
+  "endpoint": "http://127.0.0.1:8098",
+  "served_model_id": "/mnt/data/ai-models/models/deepseek-v4-flash-gguf/UD-Q4_K_XL/DeepSeek-V4-Flash-UD-Q4_K_XL-00001-of-00005.gguf",
+  "model": {
+    "backend": "llama.cpp",
+    "quant": "UD-Q4_K_XL",
+    "ctx": 8192,
+    "notes": "284B-A13B Q4, 115GB VRAM + 14-layer expert spill (~48GB) to DDR5 RAM, 4x RTX PRO 4500 + TR 9970X"
+  },
+  "options": {
+    "no_think": false
+  },
+  "hardware": {
+    "host": "RogGentoo",
+    "os": "Linux-6.18.31-gentoo-dist-x86_64-AMD_Ryzen_Threadripper_9970X_32-Cores-with-glibc2.42",
+    "cpu": "AMD Ryzen Threadripper 9970X 32-Cores",
+    "cores": 64,
+    "ram_gb": 125.1,
+    "gpus": [
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB"
+  },
+  "scores": {
+    "total": 6.0,
+    "max": 6,
+    "tiers": {
+      "code": [
+        2.0,
+        2
+      ],
+      "hard": [
+        4.0,
+        4
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 22.12,
+    "gen_n": 256,
+    "prefill_tps": 50.01
+  },
+  "tasks": [
+    {
+      "id": "fib",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 9.0,
+      "finish_reason": "stop",
+      "detail": "out='55'"
+    },
+    {
+      "id": "bugfix",
+      "tier": "code",
+      "score": 1.0,
+      "latency_s": 9.7,
+      "finish_reason": "stop",
+      "detail": "out='4.0'"
+    },
+    {
+      "id": "palindrome",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 41.7,
+      "finish_reason": "stop",
+      "detail": "out='aba\\nbb\\na\\ngeeksskeeg'"
+    },
+    {
+      "id": "parens",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 12.4,
+      "finish_reason": "stop",
+      "detail": "out='True\\nFalse\\nFalse\\nTrue'"
+    },
+    {
+      "id": "dedup_order",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 26.0,
+      "finish_reason": "stop",
+      "detail": "out='[3, 1, 2]\\n[[1], [2], [1, 2]]'"
+    },
+    {
+      "id": "rate_limiter",
+      "tier": "hard",
+      "score": 1.0,
+      "latency_s": 44.0,
+      "finish_reason": "stop",
+      "detail": "out='[True, True, False, True, False]'"
+    }
+  ]
+}

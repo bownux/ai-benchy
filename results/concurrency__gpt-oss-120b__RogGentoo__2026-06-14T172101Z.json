@@ -1,0 +1,94 @@
+{
+  "kind": "concurrency_sweep",
+  "run_at": "2026-06-14T17:21:01Z",
+  "label": "gpt-oss-120b",
+  "endpoint": "http://127.0.0.1:8080",
+  "max_tokens": 512,
+  "hardware": {
+    "host": "RogGentoo",
+    "os": "Linux-6.18.31-gentoo-dist-x86_64-AMD_Ryzen_Threadripper_9970X_32-Cores-with-glibc2.42",
+    "cpu": "AMD Ryzen Threadripper 9970X 32-Cores",
+    "cores": 64,
+    "ram_gb": 125.1,
+    "gpus": [
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA GeForce RTX 3080 Ti",
+        "vram_mb": 12288,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA GeForce RTX 3080 Ti 12GB, NVIDIA RTX PRO 4500 Blackwell 31GB"
+  },
+  "levels": [
+    {
+      "concurrency": 1,
+      "streams_ok": 1,
+      "wall_window_s": 3.196,
+      "total_tokens": 512,
+      "aggregate_tps": 160.2,
+      "mean_per_stream_tps": 170.85,
+      "min_per_stream_tps": 170.85,
+      "max_per_stream_tps": 170.85,
+      "truncated": 1
+    },
+    {
+      "concurrency": 2,
+      "streams_ok": 2,
+      "wall_window_s": 4.697,
+      "total_tokens": 1024,
+      "aggregate_tps": 218.0,
+      "mean_per_stream_tps": 114.12,
+      "min_per_stream_tps": 114.12,
+      "max_per_stream_tps": 114.12,
+      "truncated": 2
+    },
+    {
+      "concurrency": 4,
+      "streams_ok": 4,
+      "wall_window_s": 6.877,
+      "total_tokens": 2048,
+      "aggregate_tps": 297.79,
+      "mean_per_stream_tps": 78.4,
+      "min_per_stream_tps": 78.4,
+      "max_per_stream_tps": 78.4,
+      "truncated": 4
+    },
+    {
+      "concurrency": 6,
+      "streams_ok": 6,
+      "wall_window_s": 11.199,
+      "total_tokens": 3072,
+      "aggregate_tps": 274.31,
+      "mean_per_stream_tps": 90.76,
+      "min_per_stream_tps": 79.18,
+      "max_per_stream_tps": 113.93,
+      "truncated": 6
+    },
+    {
+      "concurrency": 8,
+      "streams_ok": 8,
+      "wall_window_s": 13.184,
+      "total_tokens": 4096,
+      "aggregate_tps": 310.68,
+      "mean_per_stream_tps": 78.96,
+      "min_per_stream_tps": 78.93,
+      "max_per_stream_tps": 78.99,
+      "truncated": 8
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "reasoning",
+  "suite_version": "1",
+  "label": "glm-5.2-iq1s",
+  "run_at": "2026-07-10T23:55:55Z",
+  "endpoint": "http://127.0.0.1:8098",
+  "served_model_id": "/home/luis/ai/models/glm-5.2-iq1s/GLM-5.2-UD-IQ1_S-00001-of-00006.gguf",
+  "model": {
+    "backend": "llama.cpp",
+    "quant": "UD-IQ1_S",
+    "ctx": 4096,
+    "notes": "744B-A40B, 103GB VRAM + 48-layer expert spill to 128GB RAM/NVMe mmap, no-think due to 0.8 tok/s"
+  },
+  "options": {
+    "no_think": true
+  },
+  "hardware": {
+    "host": "RogGentoo",
+    "os": "Linux-6.18.31-gentoo-dist-x86_64-AMD_Ryzen_Threadripper_9970X_32-Cores-with-glibc2.42",
+    "cpu": "AMD Ryzen Threadripper 9970X 32-Cores",
+    "cores": 64,
+    "ram_gb": 125.1,
+    "gpus": [
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB"
+  },
+  "scores": {
+    "total": 4.0,
+    "max": 4,
+    "tiers": {
+      "core": [
+        4.0,
+        4
+      ]
+    }
+  },
+  "throughput": {
+    "error": "timed out"
+  },
+  "tasks": [
+    {
+      "id": "json_only",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 19.2,
+      "finish_reason": "stop",
+      "detail": "raw='{\"name\":\"alice\",\"age\":30}'"
+    },
+    {
+      "id": "reasoning",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 21.4,
+      "finish_reason": "stop",
+      "detail": "raw='5'"
+    },
+    {
+      "id": "sql",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 101.0,
+      "finish_reason": "stop",
+      "detail": "clauses=True"
+    },
+    {
+      "id": "recall",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 32.7,
+      "finish_reason": "stop",
+      "detail": "raw='ZEPHYR-7741'"
+    }
+  ]
+}

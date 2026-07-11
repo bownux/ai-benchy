@@ -1,0 +1,102 @@
+{
+  "schema": "ai-benchy/result/1",
+  "benchy_version": "0.1.0",
+  "suite": "agentic",
+  "suite_version": "1",
+  "label": "deepseek-v4-flash-q4kxl-spill",
+  "run_at": "2026-07-11T00:35:05Z",
+  "endpoint": "http://127.0.0.1:8098",
+  "served_model_id": "/mnt/data/ai-models/models/deepseek-v4-flash-gguf/UD-Q4_K_XL/DeepSeek-V4-Flash-UD-Q4_K_XL-00001-of-00005.gguf",
+  "model": {
+    "backend": "llama.cpp",
+    "quant": "UD-Q4_K_XL",
+    "ctx": 8192,
+    "notes": "284B-A13B Q4, 115GB VRAM + 14-layer expert spill (~48GB) to DDR5 RAM, 4x RTX PRO 4500 + TR 9970X"
+  },
+  "options": {
+    "no_think": false
+  },
+  "hardware": {
+    "host": "RogGentoo",
+    "os": "Linux-6.18.31-gentoo-dist-x86_64-AMD_Ryzen_Threadripper_9970X_32-Cores-with-glibc2.42",
+    "cpu": "AMD Ryzen Threadripper 9970X 32-Cores",
+    "cores": 64,
+    "ram_gb": 125.1,
+    "gpus": [
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB"
+  },
+  "scores": {
+    "total": 4.0,
+    "max": 4,
+    "tiers": {
+      "core": [
+        2.0,
+        2
+      ],
+      "agentic": [
+        2.0,
+        2
+      ]
+    }
+  },
+  "throughput": {
+    "gen_tps": 22.2,
+    "gen_n": 256,
+    "prefill_tps": 50.06
+  },
+  "tasks": [
+    {
+      "id": "tool_call",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 5.8,
+      "finish_reason": "tool_calls",
+      "detail": "args={'city': 'Tokyo', 'unit': 'c'}"
+    },
+    {
+      "id": "doc_follow",
+      "tier": "core",
+      "score": 1.0,
+      "latency_s": 4.9,
+      "finish_reason": "stop",
+      "detail": "raw='orchard release --channel beta --build 1234'"
+    },
+    {
+      "id": "disk_full",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 131.1,
+      "finish_reason": "stop",
+      "detail": "calls=14 df=True culprit=True fix=True wandered=False"
+    },
+    {
+      "id": "crash_loop",
+      "tier": "agentic",
+      "score": 1.0,
+      "latency_s": 38.2,
+      "finish_reason": "stop",
+      "detail": "calls=3 sawlog=True root=True wandered=False"
+    }
+  ]
+}
