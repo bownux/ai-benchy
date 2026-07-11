@@ -1,0 +1,72 @@
+{
+  "kind": "concurrency_sweep",
+  "run_at": "2026-07-11T20:39:47Z",
+  "label": "deepseek-v4-flash-taco-par2",
+  "endpoint": "http://127.0.0.1:8080",
+  "max_tokens": 512,
+  "hardware": {
+    "host": "RogGentoo",
+    "os": "Linux-6.18.31-gentoo-dist-x86_64-AMD_Ryzen_Threadripper_9970X_32-Cores-with-glibc2.42",
+    "cpu": "AMD Ryzen Threadripper 9970X 32-Cores",
+    "cores": 64,
+    "ram_gb": 125.1,
+    "gpus": [
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      },
+      {
+        "name": "NVIDIA RTX PRO 4500 Blackwell",
+        "vram_mb": 32623,
+        "vendor": "nvidia"
+      }
+    ],
+    "gpu_summary": "NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB, NVIDIA RTX PRO 4500 Blackwell 31GB"
+  },
+  "levels": [
+    {
+      "concurrency": 1,
+      "streams_ok": 1,
+      "wall_window_s": 26.512,
+      "total_tokens": 512,
+      "aggregate_tps": 19.31,
+      "mean_per_stream_tps": 20.1,
+      "min_per_stream_tps": 20.1,
+      "max_per_stream_tps": 20.1,
+      "truncated": 1
+    },
+    {
+      "concurrency": 2,
+      "streams_ok": 2,
+      "wall_window_s": 40.639,
+      "total_tokens": 1024,
+      "aggregate_tps": 25.2,
+      "mean_per_stream_tps": 13.13,
+      "min_per_stream_tps": 13.13,
+      "max_per_stream_tps": 13.13,
+      "truncated": 2
+    },
+    {
+      "concurrency": 4,
+      "streams_ok": 4,
+      "wall_window_s": 87.473,
+      "total_tokens": 2048,
+      "aggregate_tps": 23.41,
+      "mean_per_stream_tps": 12.69,
+      "min_per_stream_tps": 12.42,
+      "max_per_stream_tps": 12.83,
+      "truncated": 4
+    }
+  ]
+}
